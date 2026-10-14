@@ -1,58 +1,462 @@
+
+"use strict";
+
 const recipes = [
- {id:1,name:"Makaron ze szpinakiem",emoji:"🍝",color:"#e8d9bb",time:20,cost:9,diet:"vege",tag:"Szybki obiad",desc:"Kremowy makaron z czosnkiem, szpinakiem i odrobiną sera.",ingredients:["makaron","szpinak","czosnek","śmietanka","ser"],amounts:["200 g","150 g","2 ząbki","100 ml","30 g"]},
- {id:2,name:"Kurczak z ryżem",emoji:"🍗",color:"#e9d5b7",time:30,cost:13,diet:"meat",tag:"Klasyk",desc:"Prosty, sycący obiad z kurczakiem i warzywami.",ingredients:["pierś z kurczaka","ryż","papryka","cebula"],amounts:["300 g","150 g","1 szt.","1 szt."]},
- {id:3,name:"Placki ziemniaczane",emoji:"🥔",color:"#e3dfb9",time:30,cost:7,diet:"vege",tag:"Budżetowy hit",desc:"Chrupiące placki z kilku podstawowych składników.",ingredients:["ziemniaki","jajka","cebula","mąka"],amounts:["500 g","1 szt.","1 szt.","2 łyżki"]},
- {id:4,name:"Szakszuka",emoji:"🍳",color:"#efd0b9",time:15,cost:8,diet:"vege",tag:"Gotowe w 15 min",desc:"Jajka duszone w pomidorach z przyprawami i pieczywem.",ingredients:["jajka","pomidory","cebula","pieczywo"],amounts:["2 szt.","250 g","1/2 szt.","2 kromki"]},
- {id:5,name:"Tortilla z kurczakiem",emoji:"🌯",color:"#e7d7aa",time:20,cost:14,diet:"meat",tag:"Na szybko",desc:"Tortilla z soczystym kurczakiem, chrupiącymi warzywami i sosem.",ingredients:["tortille","kurczak","sałata","pomidor","jogurt"],amounts:["2 szt.","200 g","garść","1 szt.","2 łyżki"]},
- {id:6,name:"Zupa z czerwonej soczewicy",emoji:"🥣",color:"#e8c8a8",time:35,cost:6,diet:"vege",tag:"Tanie i sycące",desc:"Rozgrzewająca zupa z soczewicy, pomidorów i aromatycznych przypraw.",ingredients:["czerwona soczewica","pomidory","marchew","cebula"],amounts:["150 g","200 g","1 szt.","1 szt."]},
- {id:7,name:"Pieczone udka z warzywami",emoji:"🍗",color:"#dfc9a9",time:45,cost:15,diet:"meat",tag:"Z piekarnika",desc:"Udka i warzywa pieką się razem — mało pracy, dużo smaku.",ingredients:["udka z kurczaka","ziemniaki","marchew","czosnek"],amounts:["2 szt.","400 g","2 szt.","2 ząbki"]},
- {id:8,name:"Kasza z pieczarkami",emoji:"🍄",color:"#d9dfc6",time:25,cost:8,diet:"vege",tag:"Bez mięsa",desc:"Kasza gryczana z podsmażonymi pieczarkami i cebulką.",ingredients:["kasza gryczana","pieczarki","cebula","natka pietruszki"],amounts:["150 g","200 g","1 szt.","1/2 pęczka"]},
- {id:9,name:"Smażony ryż z jajkiem",emoji:"🍚",color:"#e7d8b5",time:15,cost:7,diet:"vege",tag:"Zero marnowania",desc:"Dobry sposób na wykorzystanie ugotowanego wcześniej ryżu.",ingredients:["ugotowany ryż","jajka","marchew","groszek"],amounts:["300 g","2 szt.","1 szt.","garść"]}
+  {
+    name: "Jajecznica na bogato",
+    emoji: "🍳",
+    time: 10,
+    cost: 5,
+    ingredients: ["jajka", "masło", "chleb"],
+    description: "Klasyk, który ratuje poranek, obiad i późny powrót do domu.",
+    tags: ["Szybko", "Tanio"]
+  },
+  {
+    name: "Makaron z czosnkiem",
+    emoji: "🍝",
+    time: 15,
+    cost: 7,
+    ingredients: ["makaron", "czosnek", "oliwa"],
+    description: "Minimum składników, maksimum włoskiego klimatu.",
+    tags: ["15 minut", "Bez mięsa"]
+  },
+  {
+    name: "Placki ziemniaczane",
+    emoji: "🥔",
+    time: 30,
+    cost: 7,
+    ingredients: ["ziemniaki", "jajka", "mąka"],
+    description: "Chrupiące brzegi i pytanie, dlaczego nie robimy ich częściej.",
+    tags: ["Domowe", "Tanio"]
+  },
+  {
+    name: "Ryż smażony z jajkiem",
+    emoji: "🍚",
+    time: 15,
+    cost: 8,
+    ingredients: ["ryż", "jajka", "cebula"],
+    description: "Wczorajszy ryż dostaje drugie życie. Zero dramatu.",
+    tags: ["Szybko", "Na resztki"]
+  },
+  {
+    name: "Tosty serowe",
+    emoji: "🥪",
+    time: 10,
+    cost: 6,
+    ingredients: ["chleb", "ser", "masło"],
+    description: "Kiedy ambicje kulinarne kończą się na włączeniu tostera.",
+    tags: ["10 minut", "Prosto"]
+  },
+  {
+    name: "Makaron pomidorowy",
+    emoji: "🍅",
+    time: 20,
+    cost: 9,
+    ingredients: ["makaron", "pomidory", "czosnek"],
+    description: "Prosty sos i obiad gotowy szybciej niż dostawa.",
+    tags: ["Bez mięsa", "Szybko"]
+  },
+  {
+    name: "Kurczak z ryżem",
+    emoji: "🍗",
+    time: 30,
+    cost: 14,
+    ingredients: ["kurczak", "ryż", "cebula"],
+    description: "Konkretny obiad dla tych, którzy naprawdę zgłodnieli.",
+    tags: ["Syci", "Klasyk"]
+  },
+  {
+    name: "Naleśniki na słono",
+    emoji: "🥞",
+    time: 25,
+    cost: 9,
+    ingredients: ["mąka", "jajka", "mleko", "ser"],
+    description: "Z serem, z warzywami albo z tym, co woła z lodówki.",
+    tags: ["Rodzinne", "Uniwersalne"]
+  },
+  {
+    name: "Sałatka lodówkowa",
+    emoji: "🥗",
+    time: 12,
+    cost: 8,
+    ingredients: ["pomidor", "ogórek", "ser"],
+    description: "Wrzuć warzywa do miski i nazwij to planem żywieniowym.",
+    tags: ["Lekko", "Szybko"]
+  },
+  {
+    name: "Ziemniaki z twarożkiem",
+    emoji: "🥔",
+    time: 35,
+    cost: 8,
+    ingredients: ["ziemniaki", "twaróg", "śmietana"],
+    description: "Skromnie, sycąco i bez konieczności brania kredytu.",
+    tags: ["Tanio", "Domowe"]
+  },
+  {
+    name: "Omlet z serem",
+    emoji: "🧀",
+    time: 12,
+    cost: 7,
+    ingredients: ["jajka", "ser", "mleko"],
+    description: "Kilka jajek i gotowe. Nawet poniedziałek tego nie zepsuje.",
+    tags: ["Szybko", "Prosto"]
+  },
+  {
+    name: "Zupa warzywna",
+    emoji: "🥣",
+    time: 35,
+    cost: 10,
+    ingredients: ["marchew", "ziemniaki", "cebula"],
+    description: "Garnek, warzywa i chwila spokoju od pytania o obiad.",
+    tags: ["Rozgrzewająca", "Domowe"]
+  }
 ];
-const $ = id => document.getElementById(id);
-let plan = [];
-const money = n => `${n.toFixed(0)} zł`;
-function renderRecipes(list=recipes){
- const root=$("recipes"); root.innerHTML="";
- $("results-label").textContent = list.length ? `Znaleźliśmy ${list.length} ${list.length===1?"pomysł":list.length<5?"pomysły":"pomysłów"} na obiad` : "Brak dań dla wybranych filtrów";
- list.forEach((r,i)=>{
-  const card=document.createElement("article");card.className="recipe-card";
-  card.innerHTML=`<div class="recipe-art" style="background:${r.color}"><span>${r.emoji}</span><span class="tag">${r.tag}</span></div><div class="recipe-content"><h3>${r.name}</h3><p>${r.desc}</p><div class="recipe-meta"><span>◷ <strong>${r.time} min</strong></span><span>♧ <strong>${r.diet==="vege"?"Wege":"Z mięsem"}</strong></span></div><p class="ingredients">Główne składniki: ${r.ingredients.slice(0,3).join(", ")}</p><div class="recipe-actions"><span class="price">ok. ${money(r.cost)} <small>/ porcja</small></span><button class="add-button" data-add="${r.id}">+ Dodaj do planu</button></div></div>`;
-  root.appendChild(card);
- });
- root.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>addToPlan(Number(b.dataset.add))));
+
+const days = [
+  "Poniedziałek",
+  "Wtorek",
+  "Środa",
+  "Czwartek",
+  "Piątek"
+];
+
+const elements = {
+  ingredients: document.getElementById("ingredients"),
+  time: document.getElementById("time"),
+  budget: document.getElementById("budget"),
+  results: document.getElementById("results"),
+  resultCount: document.getElementById("result-count"),
+  shoppingList: document.getElementById("shopping-list"),
+  shoppingStatus: document.getElementById("shopping-status"),
+  weeklyPlan: document.getElementById("weekly-plan")
+};
+
+let shoppingItems = [];
+let currentRecipes = [];
+
+function normalize(value) {
+  return value
+    .toLocaleLowerCase("pl-PL")
+    .trim()
+    .replace(/\s+/g, " ");
 }
-function applyFilters(){
- const budget=Number($("budget").value),time=Number($("time").value),diet=$("diet").value;
- renderRecipes(recipes.filter(r=>r.cost<=budget&&r.time<=time&&(diet==="all"||r.diet===diet)));
+
+function getUserIngredients() {
+  return elements.ingredients.value
+    .split(",")
+    .map(normalize)
+    .filter(Boolean);
 }
-function addToPlan(id){plan.push(recipes.find(r=>r.id===id));renderPlan();$("plan").scrollIntoView({behavior:"smooth",block:"start"});}
-function renderPlan(){
- $("plan-count").textContent=plan.length;
- $("plan-empty").style.display=plan.length?"none":"flex";
- $("plan-items").innerHTML="";
- plan.forEach((r,i)=>{
-  const item=document.createElement("div");item.className="plan-item";
-  item.innerHTML=`<div><strong>${r.emoji} ${r.name}</strong><small>${r.time} min · ok. ${money(r.cost)}/porcja</small></div><button class="remove-item" aria-label="Usuń ${r.name} z planu" data-remove="${i}">×</button>`;
-  $("plan-items").appendChild(item);
- });
- $("plan-items").querySelectorAll("[data-remove]").forEach(b=>b.addEventListener("click",()=>{plan.splice(Number(b.dataset.remove),1);renderPlan()}));
- const ingredients=new Map();
- plan.forEach(r=>r.ingredients.forEach((name,i)=>{const key=name.toLowerCase();if(!ingredients.has(key))ingredients.set(key,{name,amounts:[]});ingredients.get(key).amounts.push(r.amounts[i]);}));
- const list=$("shopping-list");list.innerHTML="";
- if(!ingredients.size){list.innerHTML='<p class="muted">Dodaj dania do planu, aby zobaczyć składniki.</p>';$("copy-list").disabled=true;return;}
- ingredients.forEach(item=>{
-  const label=document.createElement("label");label.innerHTML=`<input type="checkbox"><span>${item.name} <small>(${item.amounts.join(" + ")})</small></span>`;list.appendChild(label);
- });
- $("copy-list").disabled=false;
+
+function ingredientMatches(recipeIngredient, userIngredient) {
+  return recipeIngredient === userIngredient ||
+    recipeIngredient.includes(userIngredient) ||
+    userIngredient.includes(recipeIngredient);
 }
-$("find-btn").addEventListener("click",applyFilters);
-$("budget").addEventListener("change",applyFilters);$("time").addEventListener("change",applyFilters);$("diet").addEventListener("change",applyFilters);
-$("random-btn").addEventListener("click",()=>{const filtered=recipes.filter(r=>r.cost<=Number($("budget").value)&&r.time<=Number($("time").value)&&($("diet").value==="all"||r.diet===$("diet").value));if(filtered.length){const r=filtered[Math.floor(Math.random()*filtered.length)];renderRecipes([r]);$("results-label").textContent="Twoja losowa propozycja";}else{applyFilters();}});
-$("clear-plan").addEventListener("click",()=>{plan=[];renderPlan();$("copy-status").textContent="";});
-$("copy-list").addEventListener("click",async()=>{
- const text=[...$("shopping-list").querySelectorAll("label")].map(l=>`${l.querySelector("input").checked?"[x]":"[ ]"} ${l.querySelector("span").innerText}`).join("\n");
- try{await navigator.clipboard.writeText(text);$("copy-status").textContent="Lista została skopiowana.";}
- catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();$("copy-status").textContent="Lista została skopiowana.";}
+
+function getFilteredRecipes() {
+  const ingredients = getUserIngredients();
+  const maxTime = Number(elements.time.value);
+  const maxCost = Number(elements.budget.value);
+
+  let matches = recipes
+    .map((recipe, index) => {
+      const matchedIngredients = recipe.ingredients.filter(item =>
+        ingredients.some(userItem =>
+          ingredientMatches(item, userItem)
+        )
+      );
+
+      return {
+        ...recipe,
+        index,
+        matchedCount: matchedIngredients.length
+      };
+    })
+    .filter(recipe =>
+      recipe.time <= maxTime && recipe.cost <= maxCost
+    );
+
+  if (ingredients.length > 0) {
+    matches = matches
+      .filter(recipe => recipe.matchedCount > 0)
+      .sort((a, b) => b.matchedCount - a.matchedCount);
+  }
+
+  return matches;
+}
+
+function renderRecipes(list) {
+  elements.resultCount.textContent =
+    `${list.length} ${getRecipeWord(list.length)}`;
+
+  if (list.length === 0) {
+    elements.results.innerHTML = `
+      <div class="empty-results">
+        <h3>Chyba mamy kulinarną zagadkę! 🤔</h3>
+        <p>
+          Nie znaleźliśmy pasującego przepisu.
+          Wpisz inne składniki, zwiększ budżet albo daj sobie
+          kilka dodatkowych minut.
+        </p>
+        <button class="button button-secondary" id="show-all-recipes" type="button">
+          Pokaż wszystkie pasujące do filtrów
+        </button>
+      </div>
+    `;
+
+    document.getElementById("show-all-recipes").addEventListener("click", () => {
+      elements.ingredients.value = "";
+      currentRecipes = getFilteredRecipes();
+      renderRecipes(currentRecipes);
+    });
+
+    return;
+  }
+
+  elements.results.innerHTML = list.map(recipe => `
+    <article class="recipe-card">
+      <div class="recipe-emoji" aria-hidden="true">${recipe.emoji}</div>
+      <div class="recipe-meta">
+        ⏱ ${recipe.time} min &nbsp;·&nbsp; ok. ${recipe.cost} zł / porcję
+      </div>
+      <h3>${recipe.name}</h3>
+      <p class="recipe-description">${recipe.description}</p>
+      <div class="recipe-tags">
+        ${recipe.tags.map(tag => `<span class="recipe-tag">${tag}</span>`).join("")}
+      </div>
+      <p class="recipe-ingredients">
+        <strong>Potrzebujesz:</strong><br>
+        ${recipe.ingredients.join(", ")}
+      </p>
+      <button
+        class="button button-secondary add-shopping"
+        type="button"
+        data-index="${recipe.index}"
+      >
+        + Dodaj braki do listy
+      </button>
+    </article>
+  `).join("");
+
+  elements.results.querySelectorAll(".add-shopping").forEach(button => {
+    button.addEventListener("click", () => {
+      addShopping(Number(button.dataset.index));
+    });
+  });
+}
+
+function getRecipeWord(count) {
+  if (count === 1) return "pomysł";
+  if (count % 10 >= 2 && count % 10 <= 4 &&
+      !(count % 100 >= 12 && count % 100 <= 14)) {
+    return "pomysły";
+  }
+  return "pomysłów";
+}
+
+function findRecipes() {
+  currentRecipes = getFilteredRecipes();
+  renderRecipes(currentRecipes);
+
+  document.getElementById("przepisy").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+function surpriseMe() {
+  const options = getFilteredRecipes();
+
+  if (options.length === 0) {
+    renderRecipes([]);
+    return;
+  }
+
+  const selected = options[
+    Math.floor(Math.random() * options.length)
+  ];
+
+  currentRecipes = [selected];
+  renderRecipes(currentRecipes);
+
+  elements.resultCount.textContent = "Losowanie 🎲";
+
+  document.getElementById("przepisy").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+function shuffle(items) {
+  const result = [...items];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+
+function makePlan() {
+  const options = getFilteredRecipes();
+
+  if (options.length === 0) {
+    elements.weeklyPlan.innerHTML =
+      '<li class="empty-state">Brak przepisów dla wybranych filtrów. Zmień czas lub budżet.</li>';
+    return;
+  }
+
+  let orderedRecipes = shuffle(options);
+
+  // Gdy jest mało przepisów, plan nadal wypełnia pięć dni.
+  const plan = days.map((day, index) => ({
+    day,
+    recipe: orderedRecipes[index % orderedRecipes.length]
+  }));
+
+  elements.weeklyPlan.innerHTML = plan.map(item => `
+    <li>
+      <strong>${item.day}:</strong>
+      ${item.recipe.emoji} ${item.recipe.name}
+      <span class="recipe-meta"> · ok. ${item.recipe.cost} zł</span>
+    </li>
+  `).join("");
+}
+
+function addShopping(index) {
+  const recipe = recipes[index];
+
+  if (!recipe) return;
+
+  const availableIngredients = getUserIngredients();
+
+  const missing = recipe.ingredients.filter(item =>
+    !availableIngredients.some(userItem =>
+      ingredientMatches(item, userItem)
+    )
+  );
+
+  const existing = new Set(shoppingItems.map(normalize));
+  let added = 0;
+
+  missing.forEach(item => {
+    if (!existing.has(normalize(item))) {
+      shoppingItems.push(item);
+      existing.add(normalize(item));
+      added++;
+    }
+  });
+
+  renderShopping();
+
+  elements.shoppingStatus.textContent = added > 0
+    ? `Dodano ${added} ${added === 1 ? "składnik" : "składniki"} do listy.`
+    : "Brak nowych składników do dodania.";
+
+  document.getElementById("lista-zakupow");
+}
+
+function renderShopping() {
+  if (shoppingItems.length === 0) {
+    elements.shoppingList.innerHTML =
+      '<li class="empty-state">Twoja lista jest jeszcze pusta.</li>';
+    return;
+  }
+
+  elements.shoppingList.innerHTML = shoppingItems.map((item, index) => `
+    <li class="shopping-item">
+      <input
+        type="checkbox"
+        id="shopping-item-${index}"
+        aria-label="Oznacz ${item} jako kupione"
+      >
+      <label class="shopping-name" for="shopping-item-${index}">${item}</label>
+    </li>
+  `).join("");
+
+  elements.shoppingList.querySelectorAll('input[type="checkbox"]').forEach(input => {
+    input.addEventListener("change", () => {
+      input.closest(".shopping-item").classList.toggle(
+        "is-checked",
+        input.checked
+      );
+    });
+  });
+}
+
+async function copyShopping() {
+  if (shoppingItems.length === 0) {
+    elements.shoppingStatus.textContent = "Najpierw dodaj składniki do listy.";
+    return;
+  }
+
+  const checkedItems = [
+    ...elements.shoppingList.querySelectorAll("input:checked")
+  ].map(input => Number(input.id.replace("shopping-item-", "")));
+
+  const remainingItems = shoppingItems.filter((item, index) =>
+    !checkedItems.includes(index)
+  );
+
+  const text = "LISTA ZAKUPÓW\n" +
+    remainingItems.map(item => `- ${item}`).join("\n");
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const temporary = document.createElement("textarea");
+      temporary.value = text;
+      temporary.style.position = "fixed";
+      temporary.style.opacity = "0";
+      document.body.appendChild(temporary);
+      temporary.select();
+
+      const copied = document.execCommand("copy");
+      temporary.remove();
+
+      if (!copied) {
+        window.prompt("Skopiuj listę zakupów:", text);
+        return;
+      }
+    }
+
+    elements.shoppingStatus.textContent = "Lista skopiowana!";
+  } catch {
+    window.prompt("Skopiuj listę zakupów:", text);
+  }
+}
+
+function clearShopping() {
+  shoppingItems = [];
+  renderShopping();
+  elements.shoppingStatus.textContent = "Lista została wyczyszczona.";
+}
+
+function clearPlan() {
+  elements.weeklyPlan.innerHTML =
+    '<li class="empty-state">Kliknij „Plan na 5 dni”, żeby ułożyć menu.</li>';
+}
+
+// Przyciski
+document.getElementById("find-button").addEventListener("click", findRecipes);
+document.getElementById("surprise-button").addEventListener("click", surpriseMe);
+document.getElementById("plan-button").addEventListener("click", makePlan);
+document.getElementById("copy-shopping").addEventListener("click", copyShopping);
+document.getElementById("clear-shopping").addEventListener("click", clearShopping);
+document.getElementById("clear-plan").addEventListener("click", clearPlan);
+
+// Enter w polu składników uruchamia wyszukiwanie.
+elements.ingredients.addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    findRecipes();
+  }
 });
-renderRecipes();renderPlan();
+
+// Pierwsze wyświetlenie przepisów po otwarciu strony.
+currentRecipes = getFilteredRecipes();
+renderRecipes(currentRecipes);
+renderShopping();
