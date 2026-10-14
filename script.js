@@ -1,964 +1,847 @@
+```javascript
+"use strict";
 
-/* Mamo, nie ma nic do jedzenia!
-   Generator działa lokalnie. Nie korzysta z AI ani z zewnętrznego API.
-*/
+document.addEventListener("DOMContentLoaded", () => {
+  const $ = (selector) => document.querySelector(selector);
 
-const $ = (selector) => document.querySelector(selector);
+  const ingredientGroups = {
+    "Warzywa": [
+      "ziemniaki", "bataty", "marchew", "cebula", "czosnek",
+      "pomidory", "pomidory koktajlowe", "ogórek", "papryka",
+      "cukinia", "bakłażan", "brokuł", "kalafior", "szpinak",
+      "jarmuż", "sałata", "rukola", "kapusta", "kapusta kiszona",
+      "buraki", "rzodkiewka", "seler", "por", "dynia",
+      "pieczarki", "grzyby", "groszek", "kukurydza", "fasolka szparagowa",
+      "szparagi", "awokado", "oliwki", "szczypiorek", "natka pietruszki"
+    ],
+    "Owoce": [
+      "jabłka", "gruszki", "banany", "truskawki", "maliny",
+      "borówki", "jagody", "wiśnie", "śliwki", "brzoskwinie",
+      "pomarańcze", "cytryny", "limonki", "mango", "ananas",
+      "winogrona", "kiwi", "awokado", "daktyle"
+    ],
+    "Mięso i ryby": [
+      "pierś z kurczaka", "udka z kurczaka", "indyk", "wołowina",
+      "wieprzowina", "mięso mielone", "boczek", "szynka",
+      "kiełbasa", "łosoś", "tuńczyk", "dorsz", "makrela",
+      "krewetki", "sardynki"
+    ],
+    "Nabiał i jajka": [
+      "jajka", "mleko", "masło", "śmietana", "jogurt naturalny",
+      "jogurt grecki", "twaróg", "serek wiejski", "mozzarella",
+      "parmezan", "feta", "ser żółty", "ricotta", "mascarpone",
+      "kefir", "śmietanka kokosowa"
+    ],
+    "Produkty zbożowe": [
+      "makaron", "spaghetti", "ryż", "kasza gryczana", "kasza jaglana",
+      "kasza bulgur", "kuskus", "płatki owsiane", "mąka pszenna",
+      "mąka pełnoziarnista", "chleb", "bułki", "tortille", "pita",
+      "pieczywo tostowe", "bułka tarta", "panko", "płatki kukurydziane"
+    ],
+    "Rośliny strączkowe i tofu": [
+      "ciecierzyca", "soczewica", "czerwona soczewica", "fasola biała",
+      "fasola czerwona", "fasola czarna", "groch", "tofu",
+      "tempeh", "edamame", "hummus"
+    ],
+    "Spiżarnia i dodatki": [
+      "passata pomidorowa", "koncentrat pomidorowy", "mleko kokosowe",
+      "bulion warzywny", "bulion drobiowy", "miód", "cukier",
+      "syrop klonowy", "oliwa", "olej", "ocet", "sos sojowy",
+      "musztarda", "majonez", "ketchup", "masło orzechowe",
+      "tahini", "pesto", "orzechy włoskie", "migdały", "orzechy nerkowca",
+      "pestki dyni", "siemię lniane", "sezam", "rodzynki"
+    ],
+    "Przyprawy i zioła": [
+      "sól", "pieprz", "papryka słodka", "papryka ostra",
+      "curry", "kurkuma", "cynamon", "oregano", "bazylia",
+      "tymianek", "rozmaryn", "kumin", "imbir", "chili",
+      "koperek", "mięta", "kolendra", "gałka muszkatołowa"
+    ]
+  };
 
-const ingredientGroups = {
-  "🥕 Warzywa": [
-    "ziemniaki", "bataty", "marchew", "cebula", "czosnek",
-    "czerwona cebula", "por", "brokuł", "kalafior", "cukinia",
-    "bakłażan", "papryka", "pomidor", "pomidorki koktajlowe",
-    "ogórek", "ogórek kiszony", "sałata", "szpinak", "jarmuż",
-    "kapusta", "kapusta kiszona", "brukselka", "buraki",
-    "rzodkiewka", "seler", "pietruszka korzeń", "natka pietruszki",
-    "szczypiorek", "kukurydza", "groszek", "fasolka szparagowa",
-    "pieczarki", "grzyby", "dynia", "rzepa", "szparagi"
-  ],
-  "🍎 Owoce": [
-    "jabłko", "gruszka", "banan", "truskawki", "maliny",
-    "borówki", "wiśnie", "śliwki", "brzoskwinia", "ananas",
-    "mango", "awokado", "cytryna", "limonka", "pomarańcza",
-    "mandarynka", "grejpfrut", "winogrona", "daktyle", "rodzynki"
-  ],
-  "🥩 Mięso i ryby": [
-    "pierś z kurczaka", "udka z kurczaka", "mięso mielone",
-    "wołowina", "wieprzowina", "schab", "boczek", "kiełbasa",
-    "szynka", "indyk", "krewetki", "łosoś", "tuńczyk",
-    "dorsz", "makrela", "sardynki", "filet rybny", "wędzony łosoś"
-  ],
-  "🥛 Nabiał i jajka": [
-    "jajka", "mleko", "masło", "śmietana", "jogurt naturalny",
-    "jogurt grecki", "twaróg", "serek śmietankowy", "mozzarella",
-    "feta", "parmezan", "ser żółty", "ser pleśniowy", "ricotta",
-    "mascarpone", "kefir", "maślanka", "mleko kokosowe"
-  ],
-  "🍞 Pieczywo i produkty zbożowe": [
-    "makaron", "spaghetti", "ryż", "ryż brązowy", "kasza gryczana",
-    "kasza jaglana", "kasza jęczmienna", "kuskus", "bulgur",
-    "płatki owsiane", "mąka pszenna", "mąka pełnoziarnista",
-    "tortilla", "chleb", "bułki", "bułka tarta", "pita",
-    "makaron ryżowy", "makaron pełnoziarnisty", "płatki kukurydziane"
-  ],
-  "🥫 Produkty w puszkach i strączki": [
-    "ciecierzyca", "czerwona fasola", "biała fasola", "soczewica",
-    "groszek konserwowy", "kukurydza konserwowa", "pomidory w puszce",
-    "passata pomidorowa", "koncentrat pomidorowy", "oliwki",
-    "ogórki konserwowe", "kapary", "tofu", "tempeh"
-  ],
-  "🥜 Orzechy i dodatki": [
-    "orzechy włoskie", "migdały", "orzechy nerkowca", "orzeszki ziemne",
-    "pestki dyni", "słonecznik", "sezam", "siemię lniane",
-    "nasiona chia", "wiórki kokosowe", "miód", "masło orzechowe",
-    "dżem", "czekolada gorzka", "kakao", "cukier", "cukier puder"
-  ],
-  "🧂 Przyprawy, sosy i pozostałe": [
-    "oliwa", "olej", "ocet", "sos sojowy", "musztarda",
-    "majonez", "ketchup", "pesto", "curry", "papryka słodka",
-    "papryka ostra", "oregano", "bazylia", "tymianek", "rozmaryn",
-    "majeranek", "cynamon", "imbir", "chili", "pieprz",
-    "sól", "bulion warzywny", "bulion drobiowy", "drożdże",
-    "proszek do pieczenia", "wanilia"
-  ]
-};
-
-// Każdy szablon ma 10 wariantów, co daje 100 gotowych przepisów.
-// Warianty są osobnymi daniami, a nie losowymi nazwami bez receptury.
-const recipeTemplates = [
-  {
-    prefix: "Makaron z",
-    category: "Makaron",
-    meal: "lunch",
-    cuisine: "italian",
-    time: 20,
-    base: ["200 g makaronu", "1 łyżka oliwy", "1 ząbek czosnku", "sól i pieprz"],
-    variants: [
-      ["pomidorami", "2 pomidory", "bazylia", "italian", "vegetarian"],
-      ["pieczarkami", "200 g pieczarek", "2 łyżki śmietany", "italian", "vegetarian"],
-      ["szpinakiem i fetą", "2 garście szpinaku", "80 g fety", "mediterranean", "vegetarian"],
-      ["kurczakiem", "200 g kurczaka", "100 ml śmietany", "italian", "meat"],
-      ["tuńczykiem", "1 puszka tuńczyka", "200 g pomidorów w puszce", "mediterranean", "fish"],
-      ["cukinią", "1 mała cukinia", "30 g parmezanu", "italian", "vegetarian"],
-      ["brokułem", "1 mały brokuł", "50 g sera żółtego", "international", "vegetarian"],
-      ["pesto", "2 łyżki pesto", "100 g pomidorków koktajlowych", "italian", "vegetarian"],
-      ["krewetkami", "150 g krewetek", "1/2 cytryny", "mediterranean", "fish"],
-      ["soczewicą", "150 g ugotowanej soczewicy", "200 g passaty", "international", "vegan"]
-    ],
-    steps: [
-      "Ugotuj makaron zgodnie z instrukcją na opakowaniu. Zachowaj kilka łyżek wody z gotowania.",
-      "Przygotuj główny dodatek i podsmaż go na oliwie z czosnkiem. Jeśli używasz mięsa lub owoców morza, smaż do pełnego ugotowania.",
-      "Dodaj pozostałe składniki wariantu i dopraw solą oraz pieprzem.",
-      "Wymieszaj z makaronem. W razie potrzeby dodaj odrobinę wody z gotowania i podawaj na gorąco."
-    ]
-  },
-  {
-    prefix: "Ryż z",
-    category: "Danie z ryżem",
-    meal: "lunch",
-    cuisine: "asian",
-    time: 25,
-    base: ["150 g ryżu", "1 łyżka oleju", "1 mała cebula", "sól i pieprz"],
-    variants: [
-      ["warzywami", "1 marchewka", "1/2 papryki", "asian", "vegan"],
-      ["kurczakiem", "200 g kurczaka", "2 łyżki sosu sojowego", "asian", "meat"],
-      ["jajkiem", "2 jajka", "100 g groszku", "asian", "vegetarian"],
-      ["ciecierzycą", "150 g ciecierzycy", "1 łyżeczka curry", "international", "vegan"],
-      ["łososiem", "150 g łososia", "1/2 cytryny", "asian", "fish"],
-      ["pieczarkami", "200 g pieczarek", "1 łyżka sosu sojowego", "asian", "vegan"],
-      ["tofu", "180 g tofu", "2 łyżki sosu sojowego", "asian", "vegan"],
-      ["wołowiną", "180 g wołowiny", "1/2 papryki", "asian", "meat"],
-      ["krewetkami", "150 g krewetek", "1 ząbek czosnku", "asian", "fish"],
-      ["fasolą i pomidorami", "150 g czerwonej fasoli", "150 g pomidorów", "international", "vegan"]
-    ],
-    steps: [
-      "Ugotuj ryż zgodnie z instrukcją na opakowaniu.",
-      "Pokrój dodatek na niewielkie kawałki. Na patelni rozgrzej olej i podsmaż cebulę.",
-      "Dodaj składnik główny i smaż do miękkości. Mięso i ryby muszą być całkowicie ugotowane.",
-      "Dodaj ryż, przyprawy i pozostałe składniki. Wymieszaj i podgrzewaj przez 2–3 minuty."
-    ]
-  },
-  {
-    prefix: "Sałatka z",
-    category: "Sałatka",
-    meal: "dinner",
-    cuisine: "mediterranean",
-    time: 15,
-    base: ["2 garście sałaty", "1 łyżka oliwy", "1 łyżeczka soku z cytryny", "sól i pieprz"],
-    variants: [
-      ["pomidorami i ogórkiem", "1 pomidor", "1/2 ogórka", "mediterranean", "vegan"],
-      ["fetą i oliwkami", "80 g fety", "8 oliwek", "mediterranean", "vegetarian"],
-      ["kurczakiem", "150 g usmażonego kurczaka", "1 pomidor", "international", "meat"],
-      ["tuńczykiem", "1 puszka tuńczyka", "1/2 czerwonej cebuli", "mediterranean", "fish"],
-      ["ciecierzycą", "150 g ciecierzycy", "1/2 papryki", "mediterranean", "vegan"],
-      ["jajkiem", "2 jajka ugotowane na twardo", "1/2 ogórka", "international", "vegetarian"],
-      ["awokado", "1 awokado", "1 pomidor", "international", "vegan"],
-      ["gruszką i orzechami", "1 gruszka", "30 g orzechów włoskich", "international", "vegan"],
-      ["mozzarellą", "100 g mozzarelli", "150 g pomidorków", "italian", "vegetarian"],
-      ["łososiem", "120 g pieczonego łososia", "1/2 ogórka", "mediterranean", "fish"]
-    ],
-    steps: [
-      "Umyj i osusz sałatę oraz wszystkie warzywa i owoce.",
-      "Pokrój składniki na kawałki. Jeśli wariant zawiera jajka, mięso lub rybę, przygotuj je wcześniej.",
-      "Wymieszaj oliwę z sokiem z cytryny, solą i pieprzem.",
-      "Połącz składniki w misce i polej dressingiem tuż przed podaniem."
-    ]
-  },
-  {
-    prefix: "Zupa z",
-    category: "Zupa",
-    meal: "soup",
-    cuisine: "polish",
-    time: 35,
-    base: ["750 ml bulionu warzywnego", "1 mała cebula", "1 łyżka oliwy", "sól i pieprz"],
-    variants: [
-      ["pomidorów", "300 g passaty", "1 marchewka", "polish", "vegan"],
-      ["brokułów", "1 brokuł", "1 ziemniak", "international", "vegan"],
-      ["dyni", "400 g dyni", "100 ml mleka kokosowego", "international", "vegan"],
-      ["pieczarek", "250 g pieczarek", "100 ml śmietany", "polish", "vegetarian"],
-      ["soczewicy", "150 g czerwonej soczewicy", "1 łyżeczka curry", "international", "vegan"],
-      ["ziemniaków", "3 ziemniaki", "1 marchewka", "polish", "vegan"],
-      ["kalafiora", "1/2 kalafiora", "1 ziemniak", "polish", "vegan"],
-      ["warzyw", "1 marchewka", "150 g mieszanki warzyw", "polish", "vegan"],
-      ["ciecierzycy", "150 g ciecierzycy", "200 g pomidorów", "mediterranean", "vegan"],
-      ["kukurydzy", "250 g kukurydzy", "100 ml mleka kokosowego", "international", "vegetarian"]
-    ],
-    steps: [
-      "Pokrój cebulę i warzywa. Podsmaż cebulę przez 2–3 minuty w garnku.",
-      "Dodaj główny składnik i bulion. Doprowadź do wrzenia.",
-      "Gotuj na małym ogniu, aż warzywa będą miękkie, zwykle 15–25 minut.",
-      "Dopraw do smaku. Możesz zostawić zupę z kawałkami warzyw lub zmiksować ją na krem."
-    ]
-  },
-  {
-    prefix: "Tortilla z",
-    category: "Wrap",
-    meal: "lunch",
-    cuisine: "mexican",
-    time: 20,
-    base: ["2 placki tortilli", "2 łyżki jogurtu naturalnego lub sosu", "garść sałaty", "pieprz"],
-    variants: [
-      ["kurczakiem", "150 g kurczaka", "1/2 papryki", "mexican", "meat"],
-      ["fasolą i kukurydzą", "100 g czerwonej fasoli", "80 g kukurydzy", "mexican", "vegan"],
-      ["jajecznicą", "2 jajka", "30 g sera", "international", "vegetarian"],
-      ["tuńczykiem", "1/2 puszki tuńczyka", "1/2 ogórka", "international", "fish"],
-      ["pieczarkami", "150 g pieczarek", "40 g sera", "international", "vegetarian"],
-      ["tofu", "150 g tofu", "1/2 papryki", "asian", "vegan"],
-      ["awokado", "1 awokado", "1 pomidor", "mexican", "vegan"],
-      ["wołowiną", "150 g wołowiny", "80 g czerwonej fasoli", "mexican", "meat"],
-      ["fetą i warzywami", "60 g fety", "1 pomidor", "mediterranean", "vegetarian"],
-      ["ciecierzycą", "150 g ciecierzycy", "1/2 papryki", "mediterranean", "vegan"]
-    ],
-    steps: [
-      "Przygotuj wybrany farsz: pokrój składniki, a mięso lub jajka usmaż do pełnego przygotowania.",
-      "Dopraw farsz solą, pieprzem i ulubionymi przyprawami.",
-      "Podgrzej tortille przez kilkanaście sekund na suchej patelni.",
-      "Nałóż sałatę, farsz i sos. Zawiń boki, a następnie zwiń tortillę w rulon."
-    ]
-  },
-  {
-    prefix: "Pieczone warzywa z",
-    category: "Danie z piekarnika",
-    meal: "lunch",
-    cuisine: "mediterranean",
-    time: 40,
-    base: ["1 cukinia", "1 papryka", "1 cebula", "1 łyżka oliwy", "oregano, sól i pieprz"],
-    variants: [
-      ["fetą", "100 g fety", "mediterranean", "vegetarian"],
-      ["ciecierzycą", "150 g ciecierzycy", "mediterranean", "vegan"],
-      ["kurczakiem", "200 g kurczaka", "international", "meat"],
-      ["mozzarellą", "100 g mozzarelli", "italian", "vegetarian"],
-      ["tofu", "180 g tofu", "international", "vegan"],
-      ["ziemniakami", "2 ziemniaki", "polish", "vegan"],
-      ["bakłażanem", "1 mały bakłażan", "mediterranean", "vegan"],
-      ["pieczarkami", "200 g pieczarek", "international", "vegan"],
-      ["łososiem", "150 g łososia", "mediterranean", "fish"],
-      ["białą fasolą", "150 g białej fasoli", "international", "vegan"]
-    ],
-    steps: [
-      "Rozgrzej piekarnik do 200°C. Przygotuj blachę wyłożoną papierem do pieczenia.",
-      "Pokrój warzywa i składnik dodatkowy na podobnej wielkości kawałki.",
-      "Wymieszaj wszystko z oliwą, oregano, solą i pieprzem.",
-      "Piecz około 25–35 minut, aż warzywa zmiękną i lekko się zarumienią. Mięso i ryby muszą być całkowicie upieczone."
-    ]
-  },
-  {
-    prefix: "Omlet z",
-    category: "Śniadanie",
-    meal: "breakfast",
-    cuisine: "international",
-    time: 12,
-    base: ["3 jajka", "1 łyżeczka masła lub oleju", "sól i pieprz"],
-    variants: [
-      ["serem", "40 g sera żółtego", "international", "vegetarian"],
-      ["pomidorami", "1 pomidor", "international", "vegetarian"],
-      ["szpinakiem", "1 garść szpinaku", "international", "vegetarian"],
-      ["pieczarkami", "100 g pieczarek", "polish", "vegetarian"],
-      ["szynką", "50 g szynki", "polish", "meat"],
-      ["fetą", "50 g fety", "mediterranean", "vegetarian"],
-      ["papryką", "1/2 papryki", "international", "vegetarian"],
-      ["brokułem", "100 g ugotowanego brokułu", "international", "vegetarian"],
-      ["łososiem", "50 g wędzonego łososia", "mediterranean", "fish"],
-      ["cebulą i szczypiorkiem", "1/2 cebuli", "polish", "vegetarian"]
-    ],
-    steps: [
-      "Przygotuj i drobno pokrój wybrany dodatek.",
-      "Roztrzep jajka z solą i pieprzem. Rozgrzej masło lub olej na patelni.",
-      "Jeśli dodatek wymaga smażenia, podsmaż go krótko, a następnie wlej jajka.",
-      "Smaż na małym ogniu, aż masa się zetnie. Złóż omlet na pół i podawaj od razu."
-    ]
-  },
-  {
-    prefix: "Curry z",
-    category: "Danie jednogarnkowe",
-    meal: "lunch",
-    cuisine: "asian",
-    time: 30,
-    base: ["200 ml mleka kokosowego", "200 g pomidorów w puszce", "1 łyżeczka curry", "1 mała cebula"],
-    variants: [
-      ["ciecierzycą", "150 g ciecierzycy", "asian", "vegan"],
-      ["kurczakiem", "200 g kurczaka", "asian", "meat"],
-      ["soczewicą", "150 g czerwonej soczewicy", "asian", "vegan"],
-      ["kalafiorem", "250 g kalafiora", "asian", "vegan"],
-      ["tofu", "180 g tofu", "asian", "vegan"],
-      ["krewetkami", "150 g krewetek", "asian", "fish"],
-      ["batatami", "1 duży batat", "international", "vegan"],
-      ["szpinakiem i groszkiem", "100 g szpinaku", "asian", "vegan"],
-      ["wołowiną", "180 g wołowiny", "asian", "meat"],
-      ["warzywami", "250 g mieszanki warzyw", "international", "vegan"]
-    ],
-    steps: [
-      "Posiekaj cebulę i pokrój główny składnik na niewielkie kawałki.",
-      "Podsmaż cebulę w garnku, dodaj curry i wymieszaj.",
-      "Dodaj główny składnik, pomidory oraz mleko kokosowe. Gotuj do miękkości; mięso i ryby muszą być całkowicie ugotowane.",
-      "Dopraw do smaku i podawaj samodzielnie lub z ryżem."
-    ]
-  },
-  {
-    prefix: "Kanapki z",
-    category: "Kanapka",
-    meal: "dinner",
-    cuisine: "international",
-    time: 10,
-    base: ["2–4 kromki chleba", "garść sałaty", "pieprz"],
-    variants: [
-      ["jajkiem", "2 jajka ugotowane na twardo", "international", "vegetarian"],
-      ["awokado", "1 awokado", "international", "vegan"],
-      ["twarożkiem", "100 g twarogu", "polish", "vegetarian"],
-      ["tuńczykiem", "1/2 puszki tuńczyka", "international", "fish"],
-      ["szynką i serem", "2 plastry szynki", "polish", "meat"],
-      ["hummusem i warzywami", "3 łyżki hummusu", "mediterranean", "vegan"],
-      ["łososiem", "60 g wędzonego łososia", "mediterranean", "fish"],
-      ["mozzarellą i pomidorem", "60 g mozzarelli", "italian", "vegetarian"],
-      ["masłem orzechowym i bananem", "1 łyżka masła orzechowego", "international", "vegan"],
-      ["pastą z fasoli", "100 g białej fasoli", "international", "vegan"]
-    ],
-    steps: [
-      "Przygotuj pieczywo. Możesz je lekko podpiec na suchej patelni.",
-      "Umyj i pokrój dodatki. Jeśli przepis zawiera jajka, ugotuj je wcześniej.",
-      "Rozsmaruj pastę lub ułóż składniki na pieczywie.",
-      "Dopraw pieprzem i podawaj od razu. Słodkie warianty możesz uzupełnić owocami."
-    ]
-  },
-  {
-    prefix: "Placuszki",
-    category: "Na słodko",
-    meal: "sweet",
-    cuisine: "international",
-    time: 20,
-    base: ["1 jajko", "4 łyżki mąki", "3 łyżki mleka lub napoju roślinnego", "1/2 łyżeczki proszku do pieczenia"],
-    variants: [
-      ["bananowe", "1 dojrzały banan", "international", "vegetarian"],
-      ["jabłkowe", "1 jabłko", "polish", "vegetarian"],
-      ["jogurtowe", "100 g jogurtu naturalnego", "international", "vegetarian"],
-      ["owsiane", "40 g płatków owsianych", "international", "vegetarian"],
-      ["dyniowe", "100 g puree z dyni", "international", "vegetarian"],
-      ["z borówkami", "80 g borówek", "international", "vegetarian"],
-      ["kokosowe", "30 g wiórków kokosowych", "international", "vegetarian"],
-      ["z kakao", "1 łyżka kakao", "international", "vegetarian"],
-      ["z twarogiem", "100 g twarogu", "polish", "vegetarian"],
-      ["marchewkowe", "1 mała starta marchewka", "international", "vegetarian"]
-    ],
-    steps: [
-      "Przygotuj składnik, od którego pochodzi nazwa placuszków: zetrzyj owoc lub rozgnieć go widelcem.",
-      "Wymieszaj jajko, mąkę, mleko i proszek do pieczenia. Dodaj wybrany składnik.",
-      "Rozgrzej lekko natłuszczoną patelnię. Nakładaj małe porcje ciasta.",
-      "Smaż na średnio małym ogniu po około 2 minuty z każdej strony. Podawaj po lekkim przestudzeniu."
-    ]
-  }
-];
-
-const recipes = [];
-
-recipeTemplates.forEach((template, templateIndex) => {
-  template.variants.forEach((variant, variantIndex) => {
-    const isLongVariant = variant.length === 5;
-    const [name, extraIngredient, third, fourth, fifth] = variant;
-
-    const cuisine = isLongVariant ? fourth : third;
-    const diet = isLongVariant ? fifth : fourth;
-    const ingredients = [...template.base];
-
-    ingredients.push(extraIngredient);
-
-    if (isLongVariant) {
-      ingredients.push(third);
-    } else if (templateIndex === 5) {
-      ingredients.push("200 g ziemniaków lub ryżu do podania");
-    } else if (templateIndex === 7) {
-      ingredients.push("ryż do podania (opcjonalnie)");
-    } else if (templateIndex === 8) {
-      ingredients.push("opcjonalnie: pomidor lub ogórek");
-    } else if (templateIndex === 9) {
-      ingredients.push("olej do smażenia", "opcjonalnie: owoce do podania");
+  const baseRecipes = [
+    {
+      name: "Makaron z sosem pomidorowym",
+      meal: "lunch",
+      cuisine: "włoska",
+      diet: "vegan",
+      time: 25,
+      base: ["makaron", "passata pomidorowa", "cebula", "czosnek", "oliwa"],
+      extras: [
+        "cukinia", "pieczarki", "szpinak", "oliwki", "papryka",
+        "bakłażan", "brokuł", "ciecierzyca", "tofu", "pomidory koktajlowe"
+      ],
+      steps: [
+        "Ugotuj makaron zgodnie z instrukcją na opakowaniu.",
+        "Posiekaj cebulę i czosnek. Podsmaż na oliwie.",
+        "Dodaj wybrany dodatek i smaż przez kilka minut.",
+        "Wlej passatę, dopraw solą, pieprzem i oregano, a następnie duś przez 8–10 minut.",
+        "Połącz sos z makaronem i podawaj."
+      ]
+    },
+    {
+      name: "Ryż z warzywami",
+      meal: "lunch",
+      cuisine: "azjatycka",
+      diet: "vegan",
+      time: 30,
+      base: ["ryż", "marchew", "papryka", "cebula", "sos sojowy", "olej"],
+      extras: [
+        "brokuł", "groszek", "kukurydza", "tofu", "pieczarki",
+        "ciecierzyca", "szpinak", "cukinia", "edamame", "fasola czarna"
+      ],
+      steps: [
+        "Ugotuj ryż zgodnie z instrukcją na opakowaniu.",
+        "Pokrój warzywa na małe kawałki.",
+        "Rozgrzej olej na dużej patelni i podsmaż cebulę z warzywami.",
+        "Dodaj sos sojowy i, jeśli trzeba, odrobinę wody.",
+        "Wymieszaj z ryżem i podawaj na ciepło."
+      ]
+    },
+    {
+      name: "Pieczone ziemniaki z dodatkami",
+      meal: "dinner",
+      cuisine: "polska",
+      diet: "vegan",
+      time: 45,
+      base: ["ziemniaki", "oliwa", "czosnek", "papryka słodka", "sól"],
+      extras: [
+        "brokuł", "marchew", "cebula", "pieczarki", "cukinia",
+        "ciecierzyca", "fasola czerwona", "tofu", "papryka", "bataty"
+      ],
+      steps: [
+        "Rozgrzej piekarnik do 200°C.",
+        "Umyj ziemniaki i pokrój na kawałki.",
+        "Wymieszaj z oliwą, czosnkiem i przyprawami.",
+        "Dodaj wybrane warzywo lub strączki i rozłóż wszystko na blasze.",
+        "Piecz około 30–40 minut, aż ziemniaki będą miękkie i rumiane."
+      ]
+    },
+    {
+      name: "Jajecznica z dodatkami",
+      meal: "breakfast",
+      cuisine: "polska",
+      diet: "vege",
+      time: 15,
+      base: ["jajka", "masło", "sól", "pieprz"],
+      extras: [
+        "szczypiorek", "pomidory", "pieczarki", "szpinak", "ser żółty",
+        "feta", "cebula", "papryka", "rukola", "awokado"
+      ],
+      steps: [
+        "Przygotuj i pokrój wybrany dodatek.",
+        "Rozgrzej masło na patelni i podsmaż dodatek, jeśli tego wymaga.",
+        "Roztrzep jajka z solą i pieprzem.",
+        "Wlej jajka na patelnię i mieszaj na małym ogniu do uzyskania ulubionej konsystencji.",
+        "Podawaj od razu, najlepiej ze świeżym pieczywem."
+      ]
+    },
+    {
+      name: "Sałatka z prostym dressingiem",
+      meal: "lunch",
+      cuisine: "międzynarodowa",
+      diet: "vegan",
+      time: 15,
+      base: ["sałata", "ogórek", "pomidory", "oliwa", "cytryny", "sól"],
+      extras: [
+        "ciecierzyca", "awokado", "oliwki", "kukurydza", "fasola czerwona",
+        "rukola", "marchew", "tofu", "pestki dyni", "orzechy włoskie"
+      ],
+      steps: [
+        "Umyj i osusz warzywa.",
+        "Pokrój składniki na kawałki i przełóż do miski.",
+        "Dodaj wybrany dodatek.",
+        "Wymieszaj oliwę z sokiem z cytryny, solą i pieprzem.",
+        "Polej sałatkę dressingiem tuż przed podaniem."
+      ]
+    },
+    {
+      name: "Zupa warzywna",
+      meal: "lunch",
+      cuisine: "polska",
+      diet: "vegan",
+      time: 45,
+      base: ["marchew", "ziemniaki", "cebula", "czosnek", "bulion warzywny"],
+      extras: [
+        "kalafior", "brokuł", "dynia", "groszek", "fasola biała",
+        "czerwona soczewica", "cukinia", "por", "kapusta", "ciecierzyca"
+      ],
+      steps: [
+        "Pokrój cebulę, czosnek i warzywa.",
+        "Podsmaż cebulę w garnku na odrobinie oliwy.",
+        "Dodaj pozostałe składniki i zalej bulionem.",
+        "Gotuj do miękkości warzyw, zwykle 20–30 minut.",
+        "Dopraw do smaku. Zupę możesz pozostawić z kawałkami warzyw lub częściowo zblendować."
+      ]
+    },
+    {
+      name: "Tortilla z nadzieniem",
+      meal: "dinner",
+      cuisine: "meksykańska",
+      diet: "vegan",
+      time: 20,
+      base: ["tortille", "papryka", "cebula", "kukurydza", "oliwa"],
+      extras: [
+        "fasola czerwona", "fasola czarna", "awokado", "tofu", "ciecierzyca",
+        "szpinak", "pieczarki", "ryż", "pomidor", "sałata"
+      ],
+      steps: [
+        "Pokrój warzywa i rozgrzej oliwę na patelni.",
+        "Podsmaż cebulę, paprykę oraz wybrany dodatek.",
+        "Dodaj kukurydzę i dopraw pieprzem oraz papryką.",
+        "Podgrzej tortille na suchej patelni.",
+        "Nałóż farsz, dodaj świeże składniki i zawiń."
+      ]
+    },
+    {
+      name: "Owsianka na słodko",
+      meal: "breakfast",
+      cuisine: "międzynarodowa",
+      diet: "vegan",
+      time: 15,
+      base: ["płatki owsiane", "mleko", "cynamon"],
+      extras: [
+        "banany", "jabłka", "gruszki", "truskawki", "borówki",
+        "masło orzechowe", "migdały", "orzechy włoskie", "rodzynki", "daktyle"
+      ],
+      steps: [
+        "Wsyp płatki do garnka i zalej mlekiem lub wodą.",
+        "Dodaj cynamon i gotuj na małym ogniu, mieszając.",
+        "Jeśli owsianka jest zbyt gęsta, dolej odrobinę płynu.",
+        "Przełóż do miski i dodaj wybrane owoce lub orzechy.",
+        "Podawaj na ciepło."
+      ]
+    },
+    {
+      name: "Tofu z warzywami",
+      meal: "dinner",
+      cuisine: "azjatycka",
+      diet: "vegan",
+      time: 30,
+      base: ["tofu", "sos sojowy", "czosnek", "imbir", "olej"],
+      extras: [
+        "brokuł", "marchew", "papryka", "pieczarki", "cukinia",
+        "szpinak", "edamame", "groszek", "kukurydza", "cebula"
+      ],
+      steps: [
+        "Osusz tofu i pokrój w kostkę.",
+        "Rozgrzej olej i smaż tofu, aż lekko się zarumieni.",
+        "Dodaj pokrojone warzywa, czosnek i odrobinę imbiru.",
+        "Wlej sos sojowy i smaż do miękkości warzyw.",
+        "Podawaj samodzielnie lub z ugotowanym ryżem."
+      ]
+    },
+    {
+      name: "Jogurtowa miska z owocami",
+      meal: "snack",
+      cuisine: "międzynarodowa",
+      diet: "vege",
+      time: 10,
+      base: ["jogurt naturalny", "płatki owsiane"],
+      extras: [
+        "banany", "jabłka", "truskawki", "maliny", "borówki",
+        "migdały", "orzechy włoskie", "daktyle", "siemię lniane", "miód"
+      ],
+      steps: [
+        "Przełóż jogurt do miski.",
+        "Umyj i pokrój owoce, jeśli to konieczne.",
+        "Dodaj płatki owsiane i wybrany dodatek.",
+        "Wymieszaj lub ułóż składniki warstwami.",
+        "Podawaj od razu."
+      ]
     }
+  ];
 
-    const title = templateIndex === 9
-      ? `${template.prefix} ${name}`
-      : `${template.prefix} ${name}`;
+  const variantNames = [
+    "klasyczne", "z warzywami", "z chrupiącym dodatkiem",
+    "z aromatycznymi ziołami", "z dodatkiem sezonowym",
+    "w wersji ekspresowej", "z nutą czosnku", "z kolorowymi dodatkami",
+    "domowe", "na dobry początek"
+  ];
 
-    recipes.push({
-      id: `recipe-${templateIndex}-${variantIndex}`,
-      title: title.charAt(0).toLocaleUpperCase("pl") + title.slice(1),
-      emoji: ["🍝", "🍚", "🥗", "🍲", "🌯", "🥘", "🍳", "🍛", "🥪", "🥞"][templateIndex],
-      category: template.category,
-      meal: template.meal,
-      cuisine,
-      diet,
-      time: template.time + (variantIndex % 3) * 3,
-      servings: 2,
-      cost: null,
-      ingredients,
-      steps: [...template.steps],
-      description: `Prosty przepis na ${title.toLocaleLowerCase("pl")}. Sprawdź składniki i przygotuj smaczny posiłek bez długiego planowania.`,
-      tags: [name, extraIngredient, template.category].map((x) => String(x).toLocaleLowerCase("pl"))
+  const recipes = [];
+
+  baseRecipes.forEach((base, baseIndex) => {
+    base.extras.forEach((extra, variantIndex) => {
+      const ingredients = [...base.base, extra];
+
+      if (base.name === "Makaron z sosem pomidorowym") {
+        ingredients.push("oregano");
+      }
+
+      if (base.name === "Ryż z warzywami") {
+        ingredients.push("pieprz");
+      }
+
+      if (base.name === "Sałatka z prostym dressingiem") {
+        ingredients.push("pieprz");
+      }
+
+      if (base.name === "Zupa warzywna") {
+        ingredients.push("sól", "pieprz");
+      }
+
+      if (base.name === "Tortilla z nadzieniem") {
+        ingredients.push("papryka słodka");
+      }
+
+      if (base.name === "Tofu z warzywami") {
+        ingredients.push("ryż");
+      }
+
+      recipes.push({
+        id: baseIndex * 10 + variantIndex + 1,
+        title: variantIndex === 0
+          ? base.name
+          : `${base.name} ${variantNames[variantIndex]}`,
+        meal: base.meal,
+        cuisine: base.cuisine,
+        diet: base.diet,
+        time: base.time,
+        ingredients: [...new Set(ingredients)],
+        steps: [...base.steps],
+        description: `Prosty przepis ${variantNames[variantIndex]}. Możesz dostosować przyprawy do własnego smaku.`,
+        servings: 2
+      });
     });
   });
-});
 
-const state = {
-  selectedIngredients: new Set(),
-  currentRecipe: null
-};
+  const state = {
+    selectedIngredients: new Set(),
+    currentRecipe: null,
+    plan: [null, null, null, null, null],
+    shopping: []
+  };
 
-function normalize(value) {
-  return String(value ?? "")
-    .toLocaleLowerCase("pl")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
-}
+  const storageKey = "mamo-nie-ma-nic-do-jedzenia-v1";
 
-function safeText(value) {
-  return String(value ?? "");
-}
+  function loadState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
 
-function readStorage(key, fallback) {
-  try {
-    const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : fallback;
-  } catch {
-    return fallback;
+      if (Array.isArray(saved.plan) && saved.plan.length === 5) {
+        state.plan = saved.plan.map((id) =>
+          recipes.find((recipe) => recipe.id === id) || null
+        );
+      }
+
+      if (Array.isArray(saved.shopping)) {
+        state.shopping = saved.shopping
+          .filter((item) => item && typeof item.name === "string")
+          .map((item) => ({
+            name: item.name,
+            checked: Boolean(item.checked)
+          }));
+      }
+    } catch (error) {
+      console.warn("Nie udało się odczytać zapisanych danych.", error);
+    }
   }
-}
 
-function writeStorage(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    showToast("Nie udało się zapisać danych w tej przeglądarce.");
+  function saveState() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({
+        plan: state.plan.map((recipe) => recipe ? recipe.id : null),
+        shopping: state.shopping
+      }));
+    } catch (error) {
+      console.warn("Nie udało się zapisać danych w przeglądarce.", error);
+    }
   }
-}
 
-let toastTimer;
+  function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, (character) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
+  }
 
-function showToast(message) {
-  const toast = $("#toast");
-  if (!toast) return;
+  function mealLabel(meal) {
+    return ({
+      breakfast: "Śniadanie",
+      lunch: "Obiad",
+      dinner: "Kolacja",
+      snack: "Przekąska"
+    })[meal] || "Posiłek";
+  }
 
-  toast.textContent = message;
-  toast.classList.add("show");
-  clearTimeout(toastTimer);
+  function dietLabel(diet) {
+    return ({
+      vegan: "Wegańskie",
+      vege: "Wegetariańskie",
+      meat: "Mięsne"
+    })[diet] || "";
+  }
 
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
-}
+  function renderIngredientCategories() {
+    const container = $("#ingredient-categories");
+    container.innerHTML = "";
 
-function renderIngredientCategories(search = "") {
-  const root = $("#ingredient-categories");
-  if (!root) return;
+    Object.entries(ingredientGroups).forEach(([group, items], index) => {
+      const details = document.createElement("details");
+      details.className = "ingredient-category";
+      details.open = index === 0;
 
-  root.replaceChildren();
-  const query = normalize(search);
-  let visibleCount = 0;
+      const summary = document.createElement("summary");
+      summary.textContent = `${group} (${items.length})`;
+      details.appendChild(summary);
 
-  Object.entries(ingredientGroups).forEach(([category, ingredients], index) => {
-    const visible = ingredients.filter((ingredient) =>
-      normalize(ingredient).includes(query)
-    );
+      const options = document.createElement("div");
+      options.className = "ingredient-options";
 
-    if (!visible.length) return;
-    visibleCount += visible.length;
+      items.forEach((ingredient) => {
+        const label = document.createElement("label");
+        label.className = "ingredient-option";
 
-    const details = document.createElement("details");
-    details.className = "ingredient-category";
-    details.open = Boolean(query) || index === 0;
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = ingredient;
+        checkbox.checked = state.selectedIngredients.has(ingredient);
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) {
+            state.selectedIngredients.add(ingredient);
+          } else {
+            state.selectedIngredients.delete(ingredient);
+          }
 
-    const summary = document.createElement("summary");
-    summary.textContent = `${category} (${visible.length})`;
+          renderSelectedIngredients();
+        });
 
-    const options = document.createElement("div");
-    options.className = "ingredient-options";
+        const text = document.createElement("span");
+        text.textContent = ingredient;
 
-    visible.forEach((ingredient) => {
-      const label = document.createElement("label");
-      label.className = "ingredient-option";
+        label.append(checkbox, text);
+        options.appendChild(label);
+      });
 
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.value = ingredient;
-      checkbox.checked = state.selectedIngredients.has(ingredient);
+      details.appendChild(options);
+      container.appendChild(details);
+    });
 
-      checkbox.addEventListener("change", () => {
-        if (checkbox.checked) {
-          state.selectedIngredients.add(ingredient);
-        } else {
-          state.selectedIngredients.delete(ingredient);
-        }
+    filterIngredientOptions();
+  }
+
+  function filterIngredientOptions() {
+    const query = $("#ingredient-search").value.trim().toLocaleLowerCase("pl");
+
+    document.querySelectorAll(".ingredient-category").forEach((category) => {
+      let visibleCount = 0;
+
+      category.querySelectorAll(".ingredient-option").forEach((option) => {
+        const matches = option.textContent.toLocaleLowerCase("pl").includes(query);
+        option.hidden = !matches;
+        if (matches) visibleCount++;
+      });
+
+      category.hidden = visibleCount === 0;
+
+      if (query && visibleCount > 0) {
+        category.open = true;
+      }
+    });
+  }
+
+  function renderSelectedIngredients() {
+    const container = $("#selected-ingredients");
+    container.innerHTML = "";
+
+    if (state.selectedIngredients.size === 0) {
+      const message = document.createElement("span");
+      message.className = "muted";
+      message.textContent = "Nie wybrano jeszcze składników.";
+      container.appendChild(message);
+      return;
+    }
+
+    state.selectedIngredients.forEach((ingredient) => {
+      const chip = document.createElement("span");
+      chip.className = "ingredient-chip";
+
+      const name = document.createElement("span");
+      name.textContent = ingredient;
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.textContent = "×";
+      remove.setAttribute("aria-label", `Usuń składnik: ${ingredient}`);
+      remove.addEventListener("click", () => {
+        state.selectedIngredients.delete(ingredient);
+        const checkbox = [...document.querySelectorAll("#ingredient-categories input")]
+          .find((input) => input.value === ingredient);
+        if (checkbox) checkbox.checked = false;
         renderSelectedIngredients();
       });
 
-      const text = document.createElement("span");
-      text.textContent = ingredient;
-
-      label.append(checkbox, text);
-      options.appendChild(label);
+      chip.append(name, remove);
+      container.appendChild(chip);
     });
-
-    details.append(summary, options);
-    root.appendChild(details);
-  });
-
-  if (!visibleCount) {
-    const message = document.createElement("p");
-    message.className = "ingredient-empty";
-    message.textContent = "Nie znaleziono składnika.";
-    root.appendChild(message);
-  }
-}
-
-function renderSelectedIngredients() {
-  const root = $("#selected-ingredients");
-  if (!root) return;
-
-  root.replaceChildren();
-
-  if (!state.selectedIngredients.size) {
-    const empty = document.createElement("span");
-    empty.className = "muted";
-    empty.textContent = "Nie wybrano jeszcze składników.";
-    root.appendChild(empty);
-    return;
   }
 
-  state.selectedIngredients.forEach((ingredient) => {
-    const tag = document.createElement("span");
-    tag.className = "selected-tag";
+  function getMatchingRecipes() {
+    const meal = $("#meal-type").value;
+    const cuisine = $("#cuisine").value;
+    const diet = $("#diet").value;
+    const maxTime = $("#time").value;
+    const selected = [...state.selectedIngredients];
 
-    const text = document.createElement("span");
-    text.textContent = ingredient;
+    return recipes.filter((recipe) => {
+      if (meal !== "all" && recipe.meal !== meal) return false;
+      if (cuisine !== "all" && recipe.cuisine !== cuisine) return false;
+      if (diet === "vegan" && recipe.diet !== "vegan") return false;
+      if (diet === "vege" && !["vegan", "vege"].includes(recipe.diet)) return false;
+      if (maxTime !== "all" && recipe.time > Number(maxTime)) return false;
 
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.textContent = "×";
-    remove.setAttribute("aria-label", `Usuń składnik ${ingredient}`);
+      if (selected.length) {
+        const recipeIngredients = recipe.ingredients.map((item) =>
+          item.toLocaleLowerCase("pl")
+        );
 
-    remove.addEventListener("click", () => {
-      state.selectedIngredients.delete(ingredient);
-      renderIngredientCategories($("#ingredient-search").value);
-      renderSelectedIngredients();
-    });
+        const hasMatch = selected.some((ingredient) =>
+          recipeIngredients.some((item) =>
+            item.includes(ingredient.toLocaleLowerCase("pl")) ||
+            ingredient.toLocaleLowerCase("pl").includes(item)
+          )
+        );
 
-    tag.append(text, remove);
-    root.appendChild(tag);
-  });
-}
-
-function selectedDietMatches(recipe, diet) {
-  if (diet === "all") return true;
-  if (diet === "vegetarian") return ["vegetarian", "vegan"].includes(recipe.diet);
-  if (diet === "vegan") return recipe.diet === "vegan";
-  if (diet === "meat") return recipe.diet === "meat";
-  if (diet === "fish") return recipe.diet === "fish";
-  return true;
-}
-
-function getMatchingRecipes() {
-  const meal = $("#meal-type").value;
-  const cuisine = $("#cuisine").value;
-  const diet = $("#diet").value;
-  const timeValue = $("#time").value;
-  const maxTime = timeValue === "any" ? Infinity : Number(timeValue);
-  const selected = [...state.selectedIngredients].map(normalize);
-
-  return recipes.filter((recipe) => {
-    if (meal !== "all" && recipe.meal !== meal) return false;
-    if (cuisine !== "all" && cuisine !== "international" && recipe.cuisine !== cuisine) return false;
-    if (cuisine === "international" && recipe.cuisine === "polish") {
-      // Kuchnia świata obejmuje również przepisy międzynarodowe.
-      return false;
-    }
-    if (!selectedDietMatches(recipe, diet)) return false;
-    if (recipe.time > maxTime) return false;
-
-    if (selected.length) {
-      const recipeText = normalize([
-        recipe.title,
-        ...recipe.ingredients,
-        ...recipe.tags
-      ].join(" "));
-
-      // Przepis musi pasować do co najmniej jednego zaznaczonego składnika.
-      const matches = selected.some((ingredient) => recipeText.includes(ingredient));
-      if (!matches) return false;
-    }
-
-    return true;
-  });
-}
-
-function renderRecipe(recipe) {
-  state.currentRecipe = recipe;
-
-  $("#empty-result").hidden = true;
-  $("#recipe-result").hidden = false;
-
-  $("#result-title").textContent = recipe.title;
-  $("#result-description").textContent = recipe.description;
-  $("#result-category").textContent = recipe.category;
-  $("#result-time").textContent = `${recipe.time} min`;
-  $("#result-cost").textContent = "Zwykłe składniki";
-  $("#result-servings").textContent = `${recipe.servings} porc.`;
-  $("#result-message").textContent = "";
-
-  const ingredients = $("#result-ingredients");
-  ingredients.replaceChildren();
-
-  recipe.ingredients.forEach((ingredient) => {
-    const li = document.createElement("li");
-    li.textContent = ingredient;
-    ingredients.appendChild(li);
-  });
-
-  const steps = $("#result-steps");
-  steps.replaceChildren();
-
-  recipe.steps.forEach((step) => {
-    const li = document.createElement("li");
-    li.textContent = step;
-    steps.appendChild(li);
-  });
-
-  $("#losuj").scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function generateRecipe() {
-  const matching = getMatchingRecipes();
-
-  if (!matching.length) {
-    showToast("Nie znaleziono pasującego dania. Zmień preferencje lub wybierz inne składniki.");
-    return;
-  }
-
-  let choices = matching;
-
-  // Jeśli są wybrane składniki, najpierw promujemy przepisy pasujące
-  // do największej liczby z nich.
-  if (state.selectedIngredients.size) {
-    const selected = [...state.selectedIngredients].map(normalize);
-
-    const score = (recipe) => {
-      const text = normalize([
-        recipe.title,
-        ...recipe.ingredients,
-        ...recipe.tags
-      ].join(" "));
-      return selected.filter((item) => text.includes(item)).length;
-    };
-
-    const highest = Math.max(...matching.map(score));
-    choices = matching.filter((recipe) => score(recipe) === highest);
-  }
-
-  const recipe = choices[Math.floor(Math.random() * choices.length)];
-  renderRecipe(recipe);
-}
-
-function renderCards(query = "") {
-  const grid = $("#recipe-grid");
-  if (!grid) return;
-
-  const term = normalize(query);
-  const filtered = recipes.filter((recipe) =>
-    normalize([
-      recipe.title,
-      recipe.description,
-      recipe.category,
-      ...recipe.ingredients
-    ].join(" ")).includes(term)
-  );
-
-  grid.replaceChildren();
-  $("#no-recipes").hidden = filtered.length > 0;
-
-  filtered.forEach((recipe) => {
-    const card = document.createElement("article");
-    card.className = "recipe-card";
-
-    const top = document.createElement("div");
-    top.className = "card-top";
-
-    const emoji = document.createElement("span");
-    emoji.className = "card-emoji";
-    emoji.textContent = recipe.emoji;
-
-    const time = document.createElement("span");
-    time.className = "card-time";
-    time.textContent = `⏱ ${recipe.time} min`;
-    top.append(emoji, time);
-
-    const title = document.createElement("h3");
-    title.textContent = recipe.title;
-
-    const description = document.createElement("p");
-    description.textContent = recipe.description;
-
-    const bottom = document.createElement("div");
-    bottom.className = "card-bottom";
-
-    const category = document.createElement("span");
-    category.className = "card-cost";
-    category.textContent = recipe.category;
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "card-open";
-    button.textContent = "Zobacz przepis →";
-    button.addEventListener("click", () => renderRecipe(recipe));
-
-    bottom.append(category, button);
-    card.append(top, title, description, bottom);
-    grid.appendChild(card);
-  });
-}
-
-function getPlan() {
-  const value = readStorage("mamo-meal-plan-v2", []);
-  return Array.isArray(value) ? value : [];
-}
-
-function savePlan(plan) {
-  writeStorage("mamo-meal-plan-v2", plan);
-  renderPlan();
-}
-
-function renderPlan() {
-  const root = $("#meal-plan");
-  if (!root) return;
-
-  const plan = getPlan();
-  const days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
-  root.replaceChildren();
-
-  days.forEach((day, index) => {
-    const entry = plan[index];
-
-    const row = document.createElement("div");
-    row.className = "meal-day";
-
-    const label = document.createElement("span");
-    label.className = "day-label";
-    label.textContent = day;
-
-    const title = document.createElement("span");
-    title.className = "day-meal";
-    title.textContent = entry ? entry.title : "Jeszcze nic nie zaplanowano";
-
-    const action = document.createElement("button");
-    action.type = "button";
-    action.className = "day-remove";
-    action.textContent = entry ? "×" : "+";
-    action.setAttribute("aria-label", entry ? `Usuń posiłek: ${day}` : `Dodaj posiłek: ${day}`);
-
-    action.addEventListener("click", () => {
-      const updated = getPlan();
-
-      if (updated[index]) {
-        updated[index] = null;
-        savePlan(updated);
-        showToast("Usunięto danie z planu.");
-      } else if (state.currentRecipe) {
-        updated[index] = {
-          id: state.currentRecipe.id,
-          title: state.currentRecipe.title
-        };
-        savePlan(updated);
-        showToast("Dodano danie do planu.");
-      } else {
-        showToast("Najpierw otwórz przepis.");
+        if (!hasMatch) return false;
       }
+
+      return true;
+    });
+  }
+
+  function showRecipe(recipe) {
+    if (!recipe) return;
+
+    state.currentRecipe = recipe;
+
+    $("#result-title").textContent = recipe.title;
+    $("#result-description").textContent = recipe.description;
+    $("#result-servings").textContent = recipe.servings;
+
+    $("#result-meta").innerHTML = [
+      `<span class="meta-pill">🍽️ ${escapeHTML(mealLabel(recipe.meal))}</span>`,
+      `<span class="meta-pill">⏱️ ${recipe.time} min</span>`,
+      `<span class="meta-pill">🌍 ${escapeHTML(recipe.cuisine)}</span>`,
+      `<span class="meta-pill">${escapeHTML(dietLabel(recipe.diet))}</span>`
+    ].join("");
+
+    const ingredientsList = $("#result-ingredients");
+    ingredientsList.innerHTML = "";
+
+    recipe.ingredients.forEach((ingredient) => {
+      const item = document.createElement("li");
+      item.textContent = ingredient;
+      ingredientsList.appendChild(item);
     });
 
-    row.append(label, title, action);
-    root.appendChild(row);
-  });
-}
+    const stepsList = $("#result-steps");
+    stepsList.innerHTML = "";
 
-function addCurrentRecipeToPlan() {
-  if (!state.currentRecipe) {
-    showToast("Najpierw wybierz danie.");
-    return;
+    recipe.steps.forEach((step) => {
+      const item = document.createElement("li");
+      item.textContent = step;
+      stepsList.appendChild(item);
+    });
+
+    $("#result-message").hidden = true;
+    $("#recipe-result").hidden = false;
+    $("#empty-result").hidden = true;
+    $("#recipe-result").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  const plan = getPlan();
-  const index = plan.findIndex((entry) => !entry);
+  function chooseRecipe() {
+    const matches = getMatchingRecipes();
 
-  if (index === -1 && plan.length >= 5) {
-    showToast("Plan jest pełny. Usuń danie, aby zrobić miejsce.");
-    return;
+    if (!matches.length) {
+      $("#recipe-result").hidden = true;
+      $("#empty-result").hidden = false;
+      $("#empty-result").textContent =
+        "Nie znaleziono pasującego dania. Zmień filtry lub zaznacz inne składniki.";
+      return;
+    }
+
+    const selected = [...state.selectedIngredients];
+
+    // Preferuj przepisy pasujące do największej liczby wybranych składników.
+    const ranked = matches.map((recipe) => {
+      const score = selected.filter((ingredient) =>
+        recipe.ingredients.some((item) =>
+          item.toLocaleLowerCase("pl").includes(ingredient.toLocaleLowerCase("pl")) ||
+          ingredient.toLocaleLowerCase("pl").includes(item.toLocaleLowerCase("pl"))
+        )
+      ).length;
+
+      return { recipe, score };
+    });
+
+    const bestScore = Math.max(...ranked.map((entry) => entry.score));
+    const best = ranked
+      .filter((entry) => entry.score === bestScore)
+      .map((entry) => entry.recipe);
+
+    const previousId = state.currentRecipe?.id;
+    let candidates = best;
+
+    if (best.length > 1 && previousId) {
+      const withoutPrevious = best.filter((recipe) => recipe.id !== previousId);
+      if (withoutPrevious.length) candidates = withoutPrevious;
+    }
+
+    const recipe = candidates[Math.floor(Math.random() * candidates.length)];
+    showRecipe(recipe);
   }
 
-  const target = index === -1 ? plan.length : index;
-  plan[target] = {
-    id: state.currentRecipe.id,
-    title: state.currentRecipe.title
-  };
+  function renderRecipeCards() {
+    const query = $("#recipe-search").value.trim().toLocaleLowerCase("pl");
+    const container = $("#recipe-grid");
 
-  savePlan(plan);
-  showToast("Dodano danie do planu na 5 dni.");
-}
+    const matches = recipes.filter((recipe) => {
+      const searchable = [
+        recipe.title,
+        recipe.description,
+        ...recipe.ingredients
+      ].join(" ").toLocaleLowerCase("pl");
 
-function getShopping() {
-  const value = readStorage("mamo-shopping-list-v2", []);
-  return Array.isArray(value) ? value : [];
-}
+      return searchable.includes(query);
+    });
 
-function saveShopping(items) {
-  writeStorage("mamo-shopping-list-v2", items);
-  renderShopping();
-}
+    $("#recipe-count").textContent = `Liczba przepisów: ${matches.length}`;
+    $("#no-recipes").hidden = matches.length !== 0;
+    container.innerHTML = "";
 
-function addShoppingItem(name) {
-  const text = String(name ?? "").trim();
-  if (!text) return;
+    matches.forEach((recipe) => {
+      const card = document.createElement("article");
+      card.className = "recipe-card";
 
-  const items = getShopping();
+      const title = document.createElement("h3");
+      title.textContent = recipe.title;
 
-  if (items.some((item) => normalize(item.name) === normalize(text))) {
-    showToast("Ten produkt jest już na liście.");
-    return;
+      const description = document.createElement("p");
+      description.textContent = recipe.description;
+
+      const meta = document.createElement("div");
+      meta.className = "meta-row";
+      meta.innerHTML = `
+        <span class="meta-pill">${escapeHTML(mealLabel(recipe.meal))}</span>
+        <span class="meta-pill">${recipe.time} min</span>
+      `;
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "Zobacz przepis";
+      button.addEventListener("click", () => showRecipe(recipe));
+
+      card.append(title, description, meta, button);
+      container.appendChild(card);
+    });
   }
 
-  items.push({
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    name: text,
-    checked: false
-  });
+  function renderPlan() {
+    const container = $("#meal-plan");
+    container.innerHTML = "";
 
-  saveShopping(items);
-}
+    const days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
 
-function addRecipeIngredientsToShopping() {
-  const recipe = state.currentRecipe;
-  if (!recipe) {
-    showToast("Najpierw wybierz danie.");
-    return;
+    days.forEach((day, index) => {
+      const card = document.createElement("article");
+      card.className = "plan-day";
+
+      const title = document.createElement("h3");
+      title.textContent = day;
+      card.appendChild(title);
+
+      const recipe = state.plan[index];
+
+      if (recipe) {
+        const name = document.createElement("p");
+        name.textContent = recipe.title;
+        card.appendChild(name);
+
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.textContent = "Pokaż przepis";
+        openButton.addEventListener("click", () => showRecipe(recipe));
+        card.appendChild(openButton);
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "button-secondary";
+        removeButton.style.marginTop = "8px";
+        removeButton.textContent = "Usuń";
+        removeButton.addEventListener("click", () => {
+          state.plan[index] = null;
+          saveState();
+          renderPlan();
+        });
+        card.appendChild(removeButton);
+      } else {
+        const empty = document.createElement("p");
+        empty.className = "muted";
+        empty.textContent = "Brak zaplanowanego dania.";
+        card.appendChild(empty);
+      }
+
+      container.appendChild(card);
+    });
   }
 
-  const items = getShopping();
-  let added = 0;
+  function addCurrentRecipeToPlan() {
+    if (!state.currentRecipe) return;
 
-  recipe.ingredients.forEach((ingredient) => {
-    if (!items.some((item) => normalize(item.name) === normalize(ingredient))) {
-      items.push({
-        id: `${Date.now()}-${added}-${Math.random().toString(36).slice(2, 6)}`,
-        name: ingredient,
-        checked: false
+    let index = state.plan.findIndex((recipe) => recipe === null);
+
+    if (index === -1) {
+      index = 0;
+      state.plan[index] = state.currentRecipe;
+    } else {
+      state.plan[index] = state.currentRecipe;
+    }
+
+    saveState();
+    renderPlan();
+
+    $("#result-message").textContent =
+      `Dodano „${state.currentRecipe.title}” do planu na ${["poniedziałek", "wtorek", "środę", "czwartek", "piątek"][index]}.`;
+    $("#result-message").hidden = false;
+  }
+
+  function addShoppingItem(name) {
+    const cleaned = name.trim();
+    if (!cleaned) return;
+
+    const exists = state.shopping.some((item) =>
+      item.name.toLocaleLowerCase("pl") === cleaned.toLocaleLowerCase("pl")
+    );
+
+    if (!exists) {
+      state.shopping.push({ name: cleaned, checked: false });
+      saveState();
+      renderShoppingList();
+    }
+  }
+
+  function addRecipeIngredientsToShopping() {
+    if (!state.currentRecipe) return;
+
+    state.currentRecipe.ingredients.forEach(addShoppingItem);
+
+    $("#result-message").textContent =
+      "Składniki przepisu dodano do listy zakupów. Duplikaty pominięto.";
+    $("#result-message").hidden = false;
+  }
+
+  function renderShoppingList() {
+    const list = $("#shopping-list");
+    list.innerHTML = "";
+
+    state.shopping.forEach((item, index) => {
+      const li = document.createElement("li");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = item.checked;
+      checkbox.id = `shopping-item-${index}`;
+      checkbox.addEventListener("change", () => {
+        state.shopping[index].checked = checkbox.checked;
+        saveState();
+        renderShoppingList();
       });
-      added++;
+
+      const label = document.createElement("label");
+      label.htmlFor = checkbox.id;
+      label.textContent = item.name;
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "button-secondary";
+      remove.textContent = "Usuń";
+      remove.style.marginLeft = "auto";
+      remove.style.padding = "5px 10px";
+      remove.style.minHeight = "34px";
+      remove.addEventListener("click", () => {
+        state.shopping.splice(index, 1);
+        saveState();
+        renderShoppingList();
+      });
+
+      li.append(checkbox, label, remove);
+      list.appendChild(li);
+    });
+
+    $("#shopping-empty").hidden = state.shopping.length > 0;
+    $("#shopping-list").hidden = state.shopping.length === 0;
+  }
+
+  $("#ingredient-search").addEventListener("input", filterIngredientOptions);
+
+  $("#clear-ingredients").addEventListener("click", () => {
+    state.selectedIngredients.clear();
+    document.querySelectorAll("#ingredient-categories input[type='checkbox']")
+      .forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+    renderSelectedIngredients();
+  });
+
+  $("#generator-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    chooseRecipe();
+  });
+
+  $("#another-recipe").addEventListener("click", chooseRecipe);
+
+  $("#add-shopping").addEventListener("click", addRecipeIngredientsToShopping);
+  $("#add-plan").addEventListener("click", addCurrentRecipeToPlan);
+
+  $("#recipe-search").addEventListener("input", renderRecipeCards);
+
+  $("#clear-plan").addEventListener("click", () => {
+    state.plan = [null, null, null, null, null];
+    saveState();
+    renderPlan();
+  });
+
+  $("#shopping-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const input = $("#shopping-input");
+    addShoppingItem(input.value);
+    input.value = "";
+    input.focus();
+  });
+
+  $("#clear-shopping").addEventListener("click", () => {
+    state.shopping = [];
+    saveState();
+    renderShoppingList();
+  });
+
+  $("#copy-shopping").addEventListener("click", async () => {
+    const text = state.shopping
+      .map((item) => `${item.checked ? "[x]" : "[ ]"} ${item.name}`)
+      .join("\n");
+
+    if (!text) {
+      alert("Lista zakupów jest pusta.");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Lista zakupów została skopiowana.");
+    } catch (error) {
+      window.prompt("Skopiuj listę zakupów:", text);
     }
   });
 
-  saveShopping(items);
-  showToast(added ? `Dodano ${added} składników do zakupów.` : "Te składniki są już na liście.");
-}
-
-function renderShopping() {
-  const root = $("#shopping-list");
-  if (!root) return;
-
-  const items = getShopping();
-  root.replaceChildren();
-  $("#shopping-empty").hidden = items.length > 0;
-
-  items.forEach((item) => {
-    const li = document.createElement("li");
-    if (item.checked) li.classList.add("checked");
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = Boolean(item.checked);
-    checkbox.id = `shop-${item.id}`;
-
-    checkbox.addEventListener("change", () => {
-      const updated = getShopping().map((entry) =>
-        entry.id === item.id ? { ...entry, checked: checkbox.checked } : entry
-      );
-      saveShopping(updated);
-    });
-
-    const label = document.createElement("label");
-    label.htmlFor = checkbox.id;
-    label.textContent = item.name;
-
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.className = "remove-item";
-    remove.textContent = "×";
-    remove.setAttribute("aria-label", `Usuń ${item.name}`);
-
-    remove.addEventListener("click", () => {
-      saveShopping(getShopping().filter((entry) => entry.id !== item.id));
-    });
-
-    li.append(checkbox, label, remove);
-    root.appendChild(li);
-  });
-}
-
-// Zdarzenia formularza i przycisków
-$("#generator-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  generateRecipe();
-});
-
-$("#ingredient-search").addEventListener("input", (event) => {
-  renderIngredientCategories(event.target.value);
-});
-
-$("#clear-ingredients").addEventListener("click", () => {
-  state.selectedIngredients.clear();
-  renderIngredientCategories($("#ingredient-search").value);
+  loadState();
+  renderIngredientCategories();
   renderSelectedIngredients();
+  renderRecipeCards();
+  renderPlan();
+  renderShoppingList();
 });
-
-$("#another-recipe").addEventListener("click", generateRecipe);
-$("#add-shopping").addEventListener("click", addRecipeIngredientsToShopping);
-$("#add-plan").addEventListener("click", addCurrentRecipeToPlan);
-
-$("#recipe-search").addEventListener("input", (event) => {
-  renderCards(event.target.value);
-});
-
-$("#shopping-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const input = $("#shopping-input");
-  if (!input.value.trim()) return;
-
-  addShoppingItem(input.value);
-  input.value = "";
-  input.focus();
-});
-
-$("#clear-plan").addEventListener("click", () => {
-  savePlan([]);
-  showToast("Wyczyszczono plan posiłków.");
-});
-
-$("#clear-shopping").addEventListener("click", () => {
-  saveShopping([]);
-  showToast("Wyczyszczono listę zakupów.");
-});
-
-$("#copy-shopping").addEventListener("click", async () => {
-  const items = getShopping();
-
-  if (!items.length) {
-    showToast("Lista zakupów jest pusta.");
-    return;
-  }
-
-  const text = items
-    .map((item) => `${item.checked ? "[x]" : "[ ]"} ${item.name}`)
-    .join("\n");
-
-  try {
-    await navigator.clipboard.writeText(text);
-    showToast("Skopiowano listę zakupów.");
-  } catch {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-    document.body.appendChild(textarea);
-    textarea.select();
-
-    const success = document.execCommand("copy");
-    textarea.remove();
-
-    showToast(success ? "Skopiowano listę zakupów." : "Nie udało się skopiować listy.");
-  }
-});
-
-// Uruchomienie strony
-renderIngredientCategories();
-renderSelectedIngredients();
-renderCards();
-renderPlan();
-renderShopping();
-
-// Kontrola liczby przepisów i składników w konsoli przeglądarki.
-console.info(`Załadowano ${recipes.length} przepisów.`);
-console.info(
-  `Załadowano ${Object.values(ingredientGroups).flat().length} składników.`
-);
+```
