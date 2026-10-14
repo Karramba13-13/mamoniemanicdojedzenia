@@ -355,7 +355,6 @@ function addShopping(index) {
     ? `Dodano ${added} ${added === 1 ? "składnik" : "składniki"} do listy.`
     : "Brak nowych składników do dodania.";
 
-  document.getElementById("lista-zakupow");
 }
 
 function renderShopping() {
