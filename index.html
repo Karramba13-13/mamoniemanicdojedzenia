@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Znajdź pomysł na tani i szybki obiad. Planuj posiłki i twórz listę zakupów.">
+  <meta name="theme-color" content="#f7f5ef">
+  <title>Co dziś na obiad? — prosty planer posiłków</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Co dziś na obiad — strona główna">
+      <span class="brand-mark">🍲</span>
+      <span>co dziś <b>na obiad?</b></span>
+    </a>
+    <a class="top-link" href="#plan">Mój plan <span id="plan-count" class="count">0</span></a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">MNIEJ ZASTANAWIANIA, WIĘCEJ SMAKU</p>
+        <h1>Co dziś<br><em>ugotować?</em></h1>
+        <p class="hero-text">Znajdź pomysł na obiad dopasowany do Twojego czasu, budżetu i apetytu.</p>
+        <a class="button button-dark" href="#szukaj">Znajdź obiad <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="hero-art" aria-label="Ilustracja miski z jedzeniem" role="img">
+        <div class="sun"></div><div class="art-label">DOBRY<br>OBIAD<br><span>zaczyna się tutaj</span></div>
+        <div class="plate"><div class="food food-one"></div><div class="food food-two"></div><div class="food food-three"></div><div class="food food-four"></div><div class="food food-five"></div><div class="food food-six"></div></div>
+        <span class="floating floating-one">prosto</span><span class="floating floating-two">smacznie ✳</span>
+      </div>
+    </section>
+
+    <section class="finder section" id="szukaj">
+      <div class="section-heading">
+        <div><p class="eyebrow">TWÓJ DZISIEJSZY POMYSŁ</p><h2>Na co masz ochotę?</h2></div>
+        <p class="muted">Wybierz filtry i znajdź coś dla siebie.</p>
+      </div>
+      <div class="filters">
+        <label>Budżet na porcję
+          <select id="budget"><option value="100">Dowolny</option><option value="10">Do 10 zł</option><option value="15">Do 15 zł</option><option value="20">Do 20 zł</option></select>
+        </label>
+        <label>Czas przygotowania
+          <select id="time"><option value="999">Dowolny</option><option value="15">Do 15 minut</option><option value="30">Do 30 minut</option><option value="45">Do 45 minut</option></select>
+        </label>
+        <label>Rodzaj dania
+          <select id="diet"><option value="all">Wszystko</option><option value="vege">Wegetariańskie</option><option value="meat">Z mięsem</option></select>
+        </label>
+        <button id="find-btn" class="button button-green">Pokaż pomysły <span>↗</span></button>
+      </div>
+      <div class="results-top"><span id="results-label">Pomysły na dobry obiad</span><button id="random-btn" class="text-button">Zaskocz mnie ↗</button></div>
+      <div id="recipes" class="recipe-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="plan-section section" id="plan">
+      <div class="section-heading">
+        <div><p class="eyebrow">ZAPLANUJ Z WYPRZEDZENIEM</p><h2>Plan na najbliższe dni</h2></div>
+        <p class="muted">Dodaj dania, a lista zakupów utworzy się automatycznie.</p>
+      </div>
+      <div id="plan-empty" class="empty-state">🍽️ <span>Twój plan jest pusty. Dodaj danie z listy powyżej.</span></div>
+      <div id="plan-items" class="plan-items"></div>
+      <div class="shopping">
+        <div class="shopping-heading"><div><p class="eyebrow">PRZYGOTUJ SIĘ DO ZAKUPÓW</p><h3>Lista zakupów</h3></div><button id="clear-plan" class="text-button">Wyczyść plan</button></div>
+        <div id="shopping-list" class="shopping-list"><p class="muted">Dodaj dania do planu, aby zobaczyć składniki.</p></div>
+        <button id="copy-list" class="button button-dark" disabled>Kopiuj listę zakupów</button>
+        <p id="copy-status" class="status" role="status"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer><a class="brand" href="#"><span class="brand-mark">🍲</span><span>co dziś <b>na obiad?</b></span></a><p>Pomysł na obiad bez zbędnego kombinowania.</p><small>Koszty są orientacyjne i mogą różnić się w zależności od sklepu.</small></footer>
+  <script src="script.js"></script>
+</body>
+</html>
