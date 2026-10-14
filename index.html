@@ -1,75 +1,140 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Znajdź pomysł na tani i szybki obiad. Planuj posiłki i twórz listę zakupów.">
-  <meta name="theme-color" content="#f7f5ef">
-  <title>Co dziś na obiad? — prosty planer posiłków</title>
+  <meta name="theme-color" content="#fff8ed">
+  <meta name="description" content="Mamo, nie ma nic do jedzenia! Znajdź pomysł na obiad z tego, co masz w lodówce. Szybkie, tanie i proste przepisy.">
+  <title>Mamo, nie ma nic do jedzenia! — Co dziś na obiad?</title>
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#" aria-label="Co dziś na obiad — strona główna">
-      <span class="brand-mark">🍲</span>
-      <span>co dziś <b>na obiad?</b></span>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="Strona główna">
+      <span class="brand-icon">🍳</span>
+      <span>MAMO, <strong>RATUJ!</strong></span>
     </a>
-    <a class="top-link" href="#plan">Mój plan <span id="plan-count" class="count">0</span></a>
+    <span class="header-note">KONIEC OBIADOWEJ PANIKI</span>
   </header>
 
-  <main>
+  <main class="container">
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">MNIEJ ZASTANAWIANIA, WIĘCEJ SMAKU</p>
-        <h1>Co dziś<br><em>ugotować?</em></h1>
-        <p class="hero-text">Znajdź pomysł na obiad dopasowany do Twojego czasu, budżetu i apetytu.</p>
-        <a class="button button-dark" href="#szukaj">Znajdź obiad <span aria-hidden="true">↓</span></a>
+        <span class="eyebrow">DOMOWY KRYZYS · ODCINEK 847</span>
+        <h1>Mamo, nie ma<br>nic do <span>jedzenia!</span></h1>
+        <p>Otwierasz lodówkę. Patrzysz. Zamykasz. Otwierasz jeszcze raz. Spokojnie — sprawdzimy, co da się z tego wyczarować.</p>
+        <a class="hero-link" href="#szukaj">Ratujemy obiad <span>↓</span></a>
       </div>
-      <div class="hero-art" aria-label="Ilustracja miski z jedzeniem" role="img">
-        <div class="sun"></div><div class="art-label">DOBRY<br>OBIAD<br><span>zaczyna się tutaj</span></div>
-        <div class="plate"><div class="food food-one"></div><div class="food food-two"></div><div class="food food-three"></div><div class="food food-four"></div><div class="food food-five"></div><div class="food food-six"></div></div>
-        <span class="floating floating-one">prosto</span><span class="floating floating-two">smacznie ✳</span>
+      <div class="hero-art" aria-hidden="true">
+        <span class="hero-sun"></span>
+        <span class="hero-food">🥔</span>
+        <span class="hero-speech">SERIO.<br>PUSTO.</span>
+      </div>
+      <span class="hero-decoration" aria-hidden="true">✳</span>
+    </section>
+
+    <section id="szukaj" class="search-section">
+      <div class="section-heading">
+        <span class="section-number">01 / MISJA RATUNKOWA</span>
+        <h2>Dobra, co mamy w lodówce?</h2>
+        <p>Wpisz składniki. My zajmiemy się resztą.</p>
+      </div>
+
+      <div class="search-panel">
+        <label for="ingredients">Składniki, które masz pod ręką</label>
+        <input id="ingredients" type="text" placeholder="np. jajka, ziemniaki, ser, pomidory" autocomplete="off">
+        <p class="hint">Oddziel składniki przecinkami. Nie musisz wpisywać wszystkiego.</p>
+
+        <div class="filters">
+          <div class="filter-field">
+            <label for="time">Ile masz czasu?</label>
+            <select id="time">
+              <option value="15">Do 15 minut</option>
+              <option value="30" selected>Do 30 minut</option>
+              <option value="45">Do 45 minut</option>
+              <option value="999">Czas nie ma znaczenia</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="budget">Budżet na porcję</label>
+            <select id="budget">
+              <option value="8">Do 8 zł</option>
+              <option value="12" selected>Do 12 zł</option>
+              <option value="20">Do 20 zł</option>
+              <option value="999">Bez ograniczeń</option>
+            </select>
+          </div>
+        </div>
+
+        <button id="find-button" class="button button-primary" type="button">
+          RATUJ OBIAD! <span>→</span>
+        </button>
+        <div class="secondary-actions">
+          <button id="surprise-button" class="button button-secondary" type="button">🎲 Zaskocz mnie</button>
+          <button id="plan-button" class="button button-secondary" type="button">📅 Plan na 5 dni</button>
+        </div>
       </div>
     </section>
 
-    <section class="finder section" id="szukaj">
-      <div class="section-heading">
-        <div><p class="eyebrow">TWÓJ DZISIEJSZY POMYSŁ</p><h2>Na co masz ochotę?</h2></div>
-        <p class="muted">Wybierz filtry i znajdź coś dla siebie.</p>
+    <section id="przepisy" class="recipes-section">
+      <div class="results-heading">
+        <div>
+          <span class="section-number">02 / CO JEMY?</span>
+          <h2>Pomysł na obiad</h2>
+        </div>
+        <span id="result-count" class="result-count">Ładowanie...</span>
       </div>
-      <div class="filters">
-        <label>Budżet na porcję
-          <select id="budget"><option value="100">Dowolny</option><option value="10">Do 10 zł</option><option value="15">Do 15 zł</option><option value="20">Do 20 zł</option></select>
-        </label>
-        <label>Czas przygotowania
-          <select id="time"><option value="999">Dowolny</option><option value="15">Do 15 minut</option><option value="30">Do 30 minut</option><option value="45">Do 45 minut</option></select>
-        </label>
-        <label>Rodzaj dania
-          <select id="diet"><option value="all">Wszystko</option><option value="vege">Wegetariańskie</option><option value="meat">Z mięsem</option></select>
-        </label>
-        <button id="find-btn" class="button button-green">Pokaż pomysły <span>↗</span></button>
-      </div>
-      <div class="results-top"><span id="results-label">Pomysły na dobry obiad</span><button id="random-btn" class="text-button">Zaskocz mnie ↗</button></div>
-      <div id="recipes" class="recipe-grid" aria-live="polite"></div>
+      <div id="results" class="recipe-grid" aria-live="polite"></div>
     </section>
 
-    <section class="plan-section section" id="plan">
-      <div class="section-heading">
-        <div><p class="eyebrow">ZAPLANUJ Z WYPRZEDZENIEM</p><h2>Plan na najbliższe dni</h2></div>
-        <p class="muted">Dodaj dania, a lista zakupów utworzy się automatycznie.</p>
+    <section class="tools-grid">
+      <div class="tool-panel">
+        <div class="tool-heading">
+          <span class="tool-icon">🛒</span>
+          <div>
+            <span class="section-number">03 / DO SKLEPU</span>
+            <h2>Lista zakupów</h2>
+          </div>
+        </div>
+        <p class="tool-description">Dodaj brakujące składniki z przepisu, żeby o niczym nie zapomnieć.</p>
+        <ul id="shopping-list" class="shopping-list">
+          <li class="empty-state">Twoja lista jest jeszcze pusta.</li>
+        </ul>
+        <div class="tool-actions">
+          <button id="copy-shopping" class="button button-secondary" type="button">Kopiuj listę</button>
+          <button id="clear-shopping" class="button button-text" type="button">Wyczyść</button>
+        </div>
+        <p id="shopping-status" class="status-message" aria-live="polite"></p>
       </div>
-      <div id="plan-empty" class="empty-state">🍽️ <span>Twój plan jest pusty. Dodaj danie z listy powyżej.</span></div>
-      <div id="plan-items" class="plan-items"></div>
-      <div class="shopping">
-        <div class="shopping-heading"><div><p class="eyebrow">PRZYGOTUJ SIĘ DO ZAKUPÓW</p><h3>Lista zakupów</h3></div><button id="clear-plan" class="text-button">Wyczyść plan</button></div>
-        <div id="shopping-list" class="shopping-list"><p class="muted">Dodaj dania do planu, aby zobaczyć składniki.</p></div>
-        <button id="copy-list" class="button button-dark" disabled>Kopiuj listę zakupów</button>
-        <p id="copy-status" class="status" role="status"></p>
+
+      <div class="tool-panel plan-panel">
+        <div class="tool-heading">
+          <span class="tool-icon">📅</span>
+          <div>
+            <span class="section-number">04 / ŚWIĘTY SPOKÓJ</span>
+            <h2>Plan na 5 dni</h2>
+          </div>
+        </div>
+        <p class="tool-description">Pięć pomysłów, mniej codziennego zastanawiania się.</p>
+        <ol id="weekly-plan" class="weekly-plan">
+          <li class="empty-state">Kliknij „Plan na 5 dni”, żeby ułożyć menu.</li>
+        </ol>
+        <button id="clear-plan" class="button button-text" type="button">Usuń plan</button>
       </div>
+    </section>
+
+    <section class="bottom-note">
+      <span aria-hidden="true">💡</span>
+      <p><strong>Mała rada:</strong> nie masz dokładnie tych składników? Potraktuj przepis jako inspirację i wykorzystaj to, co już masz.</p>
     </section>
   </main>
 
-  <footer><a class="brand" href="#"><span class="brand-mark">🍲</span><span>co dziś <b>na obiad?</b></span></a><p>Pomysł na obiad bez zbędnego kombinowania.</p><small>Koszty są orientacyjne i mogą różnić się w zależności od sklepu.</small></footer>
-  <script src="script.js"></script>
+  <footer class="site-footer">
+    <a class="brand footer-brand" href="#"><span>🍳</span> MAMO, <strong>RATUJ!</strong></a>
+    <p>Stworzone dla głodnych i niezdecydowanych. ❤️</p>
+    <p class="footer-small">Przykładowe przepisy i szacunkowe koszty. Ceny mogą się różnić.</p>
+  </footer>
 </body>
 </html>
