@@ -1,140 +1,23 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff8ed">
-  <meta name="description" content="Mamo, nie ma nic do jedzenia! Znajdź pomysł na obiad z tego, co masz w lodówce. Szybkie, tanie i proste przepisy.">
-  <title>Mamo, nie ma nic do jedzenia! — Co dziś na obiad?</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111310">
+  <meta name="description" content="Znajdź pomysł na obiad z tego, co masz w lodówce. Losuj dania, poznawaj przepisy i planuj zakupy.">
+  <title>Mamo, nie ma nic do jedzenia! — generator obiadów</title>
+  <link rel="stylesheet" href="style.css"><script src="script.js" defer></script>
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="#" aria-label="Strona główna">
-      <span class="brand-icon">🍳</span>
-      <span>MAMO, <strong>RATUJ!</strong></span>
-    </a>
-    <span class="header-note">KONIEC OBIADOWEJ PANIKI</span>
-  </header>
-
-  <main class="container">
-    <section class="hero">
-      <div class="hero-copy">
-        <span class="eyebrow">DOMOWY KRYZYS · ODCINEK 847</span>
-        <h1>Mamo, nie ma<br>nic do <span>jedzenia!</span></h1>
-        <p>Otwierasz lodówkę. Patrzysz. Zamykasz. Otwierasz jeszcze raz. Spokojnie — sprawdzimy, co da się z tego wyczarować.</p>
-        <a class="hero-link" href="#szukaj">Ratujemy obiad <span>↓</span></a>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <span class="hero-sun"></span>
-        <span class="hero-food">🥔</span>
-        <span class="hero-speech">SERIO.<br>PUSTO.</span>
-      </div>
-      <span class="hero-decoration" aria-hidden="true">✳</span>
-    </section>
-
-    <section id="szukaj" class="search-section">
-      <div class="section-heading">
-        <span class="section-number">01 / MISJA RATUNKOWA</span>
-        <h2>Dobra, co mamy w lodówce?</h2>
-        <p>Wpisz składniki. My zajmiemy się resztą.</p>
-      </div>
-
-      <div class="search-panel">
-        <label for="ingredients">Składniki, które masz pod ręką</label>
-        <input id="ingredients" type="text" placeholder="np. jajka, ziemniaki, ser, pomidory" autocomplete="off">
-        <p class="hint">Oddziel składniki przecinkami. Nie musisz wpisywać wszystkiego.</p>
-
-        <div class="filters">
-          <div class="filter-field">
-            <label for="time">Ile masz czasu?</label>
-            <select id="time">
-              <option value="15">Do 15 minut</option>
-              <option value="30" selected>Do 30 minut</option>
-              <option value="45">Do 45 minut</option>
-              <option value="999">Czas nie ma znaczenia</option>
-            </select>
-          </div>
-          <div class="filter-field">
-            <label for="budget">Budżet na porcję</label>
-            <select id="budget">
-              <option value="8">Do 8 zł</option>
-              <option value="12" selected>Do 12 zł</option>
-              <option value="20">Do 20 zł</option>
-              <option value="999">Bez ograniczeń</option>
-            </select>
-          </div>
-        </div>
-
-        <button id="find-button" class="button button-primary" type="button">
-          RATUJ OBIAD! <span>→</span>
-        </button>
-        <div class="secondary-actions">
-          <button id="surprise-button" class="button button-secondary" type="button">🎲 Zaskocz mnie</button>
-          <button id="plan-button" class="button button-secondary" type="button">📅 Plan na 5 dni</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="przepisy" class="recipes-section">
-      <div class="results-heading">
-        <div>
-          <span class="section-number">02 / CO JEMY?</span>
-          <h2>Pomysł na obiad</h2>
-        </div>
-        <span id="result-count" class="result-count">Ładowanie...</span>
-      </div>
-      <div id="results" class="recipe-grid" aria-live="polite"></div>
-    </section>
-
-    <section class="tools-grid">
-      <div class="tool-panel">
-        <div class="tool-heading">
-          <span class="tool-icon">🛒</span>
-          <div>
-            <span class="section-number">03 / DO SKLEPU</span>
-            <h2>Lista zakupów</h2>
-          </div>
-        </div>
-        <p class="tool-description">Dodaj brakujące składniki z przepisu, żeby o niczym nie zapomnieć.</p>
-        <ul id="shopping-list" class="shopping-list">
-          <li class="empty-state">Twoja lista jest jeszcze pusta.</li>
-        </ul>
-        <div class="tool-actions">
-          <button id="copy-shopping" class="button button-secondary" type="button">Kopiuj listę</button>
-          <button id="clear-shopping" class="button button-text" type="button">Wyczyść</button>
-        </div>
-        <p id="shopping-status" class="status-message" aria-live="polite"></p>
-      </div>
-
-      <div class="tool-panel plan-panel">
-        <div class="tool-heading">
-          <span class="tool-icon">📅</span>
-          <div>
-            <span class="section-number">04 / ŚWIĘTY SPOKÓJ</span>
-            <h2>Plan na 5 dni</h2>
-          </div>
-        </div>
-        <p class="tool-description">Pięć pomysłów, mniej codziennego zastanawiania się.</p>
-        <ol id="weekly-plan" class="weekly-plan">
-          <li class="empty-state">Kliknij „Plan na 5 dni”, żeby ułożyć menu.</li>
-        </ol>
-        <button id="clear-plan" class="button button-text" type="button">Usuń plan</button>
-      </div>
-    </section>
-
-    <section class="bottom-note">
-      <span aria-hidden="true">💡</span>
-      <p><strong>Mała rada:</strong> nie masz dokładnie tych składników? Potraktuj przepis jako inspirację i wykorzystaj to, co już masz.</p>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <a class="brand footer-brand" href="#"><span>🍳</span> MAMO, <strong>RATUJ!</strong></a>
-    <p>Stworzone dla głodnych i niezdecydowanych. ❤️</p>
-    <p class="footer-small">Przykładowe przepisy i szacunkowe koszty. Ceny mogą się różnić.</p>
-  </footer>
-</body>
-</html>
+<header class="topbar"><a class="brand" href="#top"><span class="brand-icon">🥘</span><span><strong>Mamo, nie ma nic do jedzenia!</strong><small>Koniec kuchennej paniki.</small></span></a><nav><a href="#generator">Generator AI</a><a href="#szukaj">Przepisy</a><a href="#plan">Plan</a><a href="#zakupy">Zakupy</a></nav></header>
+<main id="top">
+  <section class="hero wrap"><div class="hero-copy"><span class="eyebrow">DOMOWA KUCHNIA · SPRYTNE POMYSŁY</span><h1>Nie wiesz, co zjeść?<br><em>Wylosuj coś dobrego.</em></h1><p>Podaj składniki, ustaw czas i budżet. Generator podsunie danie wraz z listą składników i instrukcją krok po kroku.</p><div class="hero-actions"><a class="btn btn-accent" href="#generator">Otwórz generator <span>↘</span></a><a class="text-link" href="#szukaj">Przeglądaj przepisy</a></div><div class="hero-tags"><span>● Proste składniki</span><span>● Plan i lista zakupów</span><span>● Bez konta</span></div></div><div class="hero-visual"><div class="glow"></div><div class="dish">🍲</div><span class="float-tag tag-a">Szybko i konkretnie</span><span class="float-tag tag-b">Co dziś gotujemy?</span><span class="ingredient i-a">🍅</span><span class="ingredient i-b">🥚</span><span class="ingredient i-c">🌿</span></div></section>
+  <section class="section wrap" id="generator"><div class="section-heading"><span class="eyebrow">TWÓJ KUCHENNY ASYSTENT</span><h2>Generator losowych dań</h2><p>Nie tylko nazwa dania — dostaniesz przykładowy przepis, czas, koszt i instrukcję.</p></div>
+    <div class="generator-layout"><div class="generator-controls panel"><div class="ai-label"><span class="sparkle">✦</span><div><strong>Generator pomysłów</strong><small>Tryb lokalny · bez klucza API</small></div><span class="status-pill">GOTOWY</span></div><label for="generator-ingredients">Co masz w kuchni?</label><textarea id="generator-ingredients" rows="3" placeholder="np. jajka, ziemniaki, ser, pomidory"></textarea><div class="control-grid"><div><label for="gen-time">Dostępny czas</label><select id="gen-time"><option value="15">Do 15 minut</option><option value="30" selected>Do 30 minut</option><option value="45">Do 45 minut</option><option value="60">Do godziny</option></select></div><div><label for="gen-budget">Koszt porcji</label><select id="gen-budget"><option value="8">Do 8 zł</option><option value="12" selected>Do 12 zł</option><option value="18">Do 18 zł</option><option value="30">Dowolny</option></select></div><div class="full"><label for="gen-style">Na co masz ochotę?</label><select id="gen-style"><option value="any">Zdaję się na los</option><option value="comfort">Domowe i sycące</option><option value="light">Lekkie</option><option value="vegetarian">Wegetariańskie</option><option value="vegan">Wegańskie</option><option value="meat">Z mięsem</option></select></div></div><label class="toggle"><input id="use-pantry" type="checkbox" checked><span>Preferuj dania wykorzystujące moje składniki</span></label><button class="btn btn-accent btn-wide" id="generate-button" type="button"><span>✦</span> Wylosuj danie z przepisem</button><p class="microcopy">Wersja statyczna działa od razu. Podłączenie prawdziwego modelu AI wymaga bezpiecznego endpointu po stronie serwera — instrukcja poniżej.</p></div>
+    <div class="generated panel" id="generated" aria-live="polite"><div class="generated-placeholder"><div class="placeholder-icon">✦</div><span class="eyebrow">TWOJA NASTĘPNA INSPIRACJA</span><h3>Co dziś wylosujemy?</h3><p>Kliknij przycisk, a pokażemy konkretne danie, składniki i sposób przygotowania.</p><button class="btn btn-outline" id="first-generate" type="button">Losuj pierwsze danie →</button></div></div></div>
+  </section>
+  <section class="section wrap" id="szukaj"><div class="section-heading"><span class="eyebrow">BAZA POMYSŁÓW</span><h2>Gdy chcesz wybrać samodzielnie</h2><p>Wyszukaj dostępne dania albo filtruj je po czasie i rodzaju.</p></div><div class="search-panel panel"><label for="search-ingredients">Składniki (opcjonalnie)</label><input id="search-ingredients" placeholder="np. makaron, pomidor"><div class="search-filters"><div><label for="search-time">Maksymalny czas</label><select id="search-time"><option value="60">Dowolny</option><option value="15">15 minut</option><option value="30">30 minut</option><option value="45">45 minut</option></select></div><div><label for="search-kind">Rodzaj</label><select id="search-kind"><option value="any">Wszystkie</option><option value="vegetarian">Wegetariańskie</option><option value="vegan">Wegańskie</option><option value="meat">Z mięsem</option></select></div><button class="btn btn-accent" id="search-button" type="button">Szukaj przepisów</button></div></div><p class="result-count" id="result-count" aria-live="polite"></p><div class="recipe-grid" id="recipe-results"></div></section>
+  <section class="section wrap" id="plan"><div class="section-heading"><span class="eyebrow">MNIEJ PLANOWANIA</span><h2>Plan na 5 dni</h2><p>Dodaj przepis z karty do planu. Plan zapisuje się w tej przeglądarce.</p></div><div class="plan-tools"><button class="btn btn-accent" id="random-plan" type="button">Wylosuj plan na 5 dni</button><button class="btn btn-outline" id="clear-plan" type="button">Wyczyść plan</button></div><div class="plan-list" id="plan-list"></div><p class="microcopy" id="plan-status" aria-live="polite"></p></section>
+  <section class="section wrap" id="zakupy"><div class="section-heading"><span class="eyebrow">WSZYSTKO POD RĘKĄ</span><h2>Lista zakupów</h2><p>Dodawaj składniki z przepisów, odhaczaj kupione produkty i kopiuj listę.</p></div><div class="shopping-panel panel"><div class="shopping-top"><strong>Do kupienia</strong><span id="shopping-count">0 produktów</span></div><ul id="shopping-list"></ul><p class="empty" id="shopping-empty">Lista jest pusta. Dodaj składniki z wybranego przepisu.</p><div class="plan-tools"><button class="btn btn-accent" id="copy-list" type="button">Kopiuj listę</button><button class="btn btn-outline" id="clear-list" type="button">Wyczyść listę</button></div><p class="microcopy" id="shopping-status" aria-live="polite"></p></div></section>
+  <section class="section wrap tech-note" id="ai-info"><div class="tech-icon">⚙</div><div><span class="eyebrow">WAŻNE O AI</span><h2>Jak podłączyć prawdziwą sztuczną inteligencję?</h2><p>GitHub Pages hostuje statyczne pliki i samo nie uruchomi prywatnego klucza API. Aby model AI tworzył nowe przepisy na żądanie, potrzebny jest endpoint serwerowy (np. funkcja Cloudflare Workers lub Netlify Functions), który przechowuje klucz poza przeglądarką.</p><p>Po skonfigurowaniu endpointu ustaw w <code>script.js</code> adres w zmiennej <code>AI_ENDPOINT</code>. Oczekiwany endpoint przyjmuje JSON <code>{"ingredients":[],"time":30,"budget":12,"style":"any"}</code> i zwraca JSON z polami: <code>name</code>, <code>description</code>, <code>time</code>, <code>cost</code>, <code>ingredients</code> (tablica tekstów) oraz <code>steps</code> (tablica instrukcji).</p><p class="microcopy">Nie wklejaj klucza API do pliku JavaScript ani publicznego repozytorium. Obecny generator korzysta z przygotowanej bazy i działa bez połączenia z AI.</p></div></section>
+</main><footer class="footer"><a class="brand" href="#top"><span class="brand-icon">🥘</span><strong>Mamo, nie ma nic do jedzenia!</strong></a><p>Pomysły na codzienne gotowanie. Koszty i czasy są orientacyjne.</p><a href="#top">Na górę ↑</a></footer><div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body></html>
