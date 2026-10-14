@@ -1,68 +1,191 @@
+```html
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11110f">
+  <meta name="description" content="Nie wiesz, co ugotować? Wybierz składniki i znajdź pomysł na posiłek.">
+  <title>Mamo, nie ma nic do jedzenia!</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="#start">🍳 Mamo, nie ma nic do jedzenia!</a>
+    <nav aria-label="Menu główne">
+      <a href="#losuj">Losuj danie</a>
+      <a href="#przepisy">Przepisy</a>
+      <a href="#plan">Plan posiłków</a>
+      <a href="#zakupy">Zakupy</a>
+    </nav>
+  </header>
 
-<form id="generator-form" class="panel generator-form">
-  <h3>1. Co masz w kuchni?</h3>
-  <p class="field-hint">Zaznacz składniki, które masz pod ręką. Możesz wybrać kilka kategorii.</p>
+  <main>
+    <section class="hero" id="start">
+      <div>
+        <span class="eyebrow">Koniec z pytaniem „co dziś na obiad?”</span>
+        <h1>Masz składniki.<br>My mamy pomysł.</h1>
+        <p>Wybierz produkty, określ, na co masz ochotę, i znajdź przepis z konkretną listą składników oraz instrukcją przygotowania.</p>
+        <div class="hero-actions">
+          <a class="button" href="#losuj">Znajdź coś do jedzenia</a>
+          <a class="button button-secondary" href="#przepisy">Przeglądaj przepisy</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <span>🥘</span>
+        <span>🍝</span>
+        <span>🥑</span>
+        <p>Dobre jedzenie zaczyna się od tego, co masz w lodówce.</p>
+      </div>
+    </section>
 
-  <div class="ingredient-toolbar">
-    <input id="ingredient-search" type="search" placeholder="🔎 Szukaj składnika..." aria-label="Szukaj składnika">
-    <button id="clear-ingredients" class="button button-ghost" type="button">Wyczyść</button>
-  </div>
+    <section id="losuj" class="section">
+      <div class="section-heading">
+        <span class="eyebrow">Twój kuchenny pomocnik</span>
+        <h2>Co dziś ugotujemy?</h2>
+        <p>Zaznacz składniki, które masz pod ręką. Możesz też zostawić je niezaznaczone i przeglądać wszystkie propozycje.</p>
+      </div>
 
-  <div id="ingredient-categories" class="ingredient-categories"></div>
+      <form id="generator-form">
+        <div class="form-section">
+          <h3>1. Co masz w kuchni?</h3>
+          <label for="ingredient-search">Szukaj składnika</label>
+          <input id="ingredient-search" type="search" placeholder="Np. ziemniaki, jajka, pomidory…">
+          <p class="form-hint">Rozwiń kategorię i zaznacz dostępne produkty.</p>
+          <div id="ingredient-categories"></div>
+          <div class="ingredient-actions">
+            <button id="clear-ingredients" class="button-secondary" type="button">Wyczyść składniki</button>
+          </div>
+          <div class="selected-box">
+            <strong>Wybrane składniki:</strong>
+            <div id="selected-ingredients">
+              <span class="muted">Nie wybrano jeszcze składników.</span>
+            </div>
+          </div>
+        </div>
 
-  <div class="selected-ingredients">
-    <strong>Wybrane składniki:</strong>
-    <div id="selected-ingredients" class="selected-tags">
-      <span class="muted">Nie wybrano jeszcze składników.</span>
-    </div>
-  </div>
+        <div class="form-section">
+          <h3>2. Na co masz ochotę?</h3>
+          <div class="preferences-grid">
+            <div>
+              <label for="meal-type">Rodzaj posiłku</label>
+              <select id="meal-type">
+                <option value="all">Wszystko</option>
+                <option value="breakfast">Śniadanie</option>
+                <option value="lunch">Obiad</option>
+                <option value="dinner">Kolacja</option>
+                <option value="snack">Przekąska</option>
+              </select>
+            </div>
+            <div>
+              <label for="cuisine">Kuchnia</label>
+              <select id="cuisine">
+                <option value="all">Dowolna</option>
+                <option value="polska">Polska</option>
+                <option value="włoska">Włoska</option>
+                <option value="meksykańska">Meksykańska</option>
+                <option value="azjatycka">Azjatycka</option>
+                <option value="międzynarodowa">Międzynarodowa</option>
+              </select>
+            </div>
+            <div>
+              <label for="diet">Rodzaj diety</label>
+              <select id="diet">
+                <option value="all">Bez ograniczeń</option>
+                <option value="vege">Wegetariańska</option>
+                <option value="vegan">Wegańska</option>
+              </select>
+            </div>
+            <div>
+              <label for="time">Ile masz czasu?</label>
+              <select id="time">
+                <option value="all">Dowolnie</option>
+                <option value="15">Do 15 minut</option>
+                <option value="30">Do 30 minut</option>
+                <option value="45">Do 45 minut</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-  <div class="preference-divider"></div>
+        <button id="find-recipe" class="primary-button" type="submit">🎲 Znajdź moje danie</button>
+      </form>
 
-  <h3>2. Na co masz ochotę?</h3>
-  <p class="field-hint">Dopasuj propozycję do nastroju, czasu i swoich preferencji.</p>
+      <section id="recipe-result" class="result-panel" aria-live="polite" hidden>
+        <div class="result-heading">
+          <span class="eyebrow">Propozycja dla Ciebie</span>
+          <h2 id="result-title"></h2>
+          <p id="result-description"></p>
+          <div id="result-meta" class="meta-row"></div>
+        </div>
+        <p id="result-message" class="result-message" hidden></p>
+        <div class="recipe-layout">
+          <div class="recipe-subpanel">
+            <h3>Składniki</h3>
+            <p class="muted">Porcje: <span id="result-servings">2</span></p>
+            <ul id="result-ingredients"></ul>
+          </div>
+          <div class="recipe-subpanel">
+            <h3>Przygotowanie</h3>
+            <ol id="result-steps"></ol>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button id="another-recipe" class="button-secondary" type="button">Losuj ponownie</button>
+          <button id="add-shopping" type="button">Dodaj składniki do zakupów</button>
+          <button id="add-plan" class="button-secondary" type="button">Dodaj do planu</button>
+        </div>
+      </section>
+      <p id="empty-result" class="empty-state">Wybierz składniki lub preferencje, a następnie kliknij „Znajdź moje danie”.</p>
+    </section>
 
-  <label for="meal-type">Rodzaj posiłku</label>
-  <select id="meal-type">
-    <option value="all">Wszystko — zaskocz mnie!</option>
-    <option value="lunch">Obiad</option>
-    <option value="dinner">Kolacja</option>
-    <option value="breakfast">Śniadanie</option>
-    <option value="soup">Zupa</option>
-    <option value="snack">Przekąska</option>
-    <option value="sweet">Coś na słodko</option>
-  </select>
+    <section id="przepisy" class="section">
+      <div class="section-heading">
+        <span class="eyebrow">Coś dobrego na każdy dzień</span>
+        <h2>Baza przepisów</h2>
+        <p>Przeglądaj propozycje i otwieraj pełne przepisy.</p>
+      </div>
+      <label for="recipe-search">Szukaj dania</label>
+      <input id="recipe-search" type="search" placeholder="Wpisz nazwę lub składnik…">
+      <p id="recipe-count" class="muted"></p>
+      <div id="recipe-grid" class="recipe-grid"></div>
+      <p id="no-recipes" class="empty-state" hidden>Nie znaleziono pasujących przepisów. Zmień wyszukiwanie.</p>
+    </section>
 
-  <label for="cuisine">Kuchnia</label>
-  <select id="cuisine">
-    <option value="all">Dowolna kuchnia</option>
-    <option value="polish">Polska, domowa</option>
-    <option value="italian">Włoska</option>
-    <option value="asian">Azjatycka</option>
-    <option value="mexican">Meksykańska</option>
-    <option value="mediterranean">Śródziemnomorska</option>
-    <option value="international">Różne smaki świata</option>
-  </select>
+    <section id="plan" class="section">
+      <div class="section-heading">
+        <span class="eyebrow">Mniej zastanawiania, więcej gotowania</span>
+        <h2>Plan posiłków</h2>
+        <p>Dodawaj wybrane przepisy do pięciu dostępnych dni planu.</p>
+      </div>
+      <div id="meal-plan" class="meal-plan"></div>
+      <button id="clear-plan" class="button-secondary" type="button">Wyczyść plan</button>
+    </section>
 
-  <label for="diet">Sposób odżywiania</label>
-  <select id="diet">
-    <option value="all">Bez ograniczeń</option>
-    <option value="vegetarian">Wegetariańskie</option>
-    <option value="vegan">Wegańskie</option>
-    <option value="meat">Z mięsem</option>
-    <option value="fish">Z rybą</option>
-  </select>
+    <section id="zakupy" class="section">
+      <div class="section-heading">
+        <span class="eyebrow">Nie zapomnij niczego</span>
+        <h2>Lista zakupów</h2>
+        <p>Dodawaj produkty ręcznie lub przenoś składniki z przepisu.</p>
+      </div>
+      <form id="shopping-form">
+        <label class="visually-hidden" for="shopping-input">Nowy produkt</label>
+        <input id="shopping-input" type="text" placeholder="Np. mleko, cebula…" autocomplete="off" required>
+        <button type="submit">Dodaj produkt</button>
+      </form>
+      <p id="shopping-empty" class="empty-state">Lista jest pusta.</p>
+      <ul id="shopping-list"></ul>
+      <div class="shopping-actions">
+        <button id="copy-shopping" class="button-secondary" type="button">Kopiuj listę</button>
+        <button id="clear-shopping" class="button-secondary" type="button">Wyczyść listę</button>
+      </div>
+    </section>
+  </main>
 
-  <label for="time">Ile masz czasu?</label>
-  <select id="time">
-    <option value="any">Bez znaczenia</option>
-    <option value="15">Do 15 minut</option>
-    <option value="30">Do 30 minut</option>
-    <option value="45">Do 45 minut</option>
-  </select>
-
-  <button class="button button-primary button-full" type="submit">
-    🎲 Znajdź moje danie
-  </button>
-  <p class="privacy-note">100 przepisów · Bez rejestracji · Bez AI</p>
-</form>
+  <footer>
+    <p>🍲 Mamo, nie ma nic do jedzenia! — inspiracje do codziennego gotowania.</p>
+  </footer>
+</body>
+</html>
+```
