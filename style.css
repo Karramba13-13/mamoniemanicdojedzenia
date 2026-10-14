@@ -138,4 +138,10 @@
   .ingredient-toolbar {
     flex-wrap: wrap;
   }
+  
+.generator-form .ingredient-option {
+  display: flex;
+  align-items: center;
+  margin: 0;
 }
+
